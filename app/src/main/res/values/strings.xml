@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">SeaWeather4SHD</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="open_sucssess">打开串口成功</string>
+    <string name="close_sucssess">关闭串口成功</string>
+    <string name="receive_textview">接收窗口</string>
+    <string name="send_edittext">发送窗口</string>
+    <string name="open_serial">打开串口</string>
+    <string name="close_serial">关闭串口</string>
+    <string name="send_data">发送数据</string>
+    <string name="clear_data">清空数据</string>
+    <string name="data_to_send">请输入要发送的数据</string>
+    <string name="title_activity_first">FirstActivity</string>
+    <string name="pull_to_refresh">下拉可以刷新</string>
+    <string name="release_to_refresh">释放立即刷新</string>
+    <string name="refreshing">正在刷新…</string>
+    <string name="not_updated_yet">暂未更新过</string>
+    <string name="updated_at">上次更新于%1$s前</string>
+    <string name="updated_just_now">刚刚更新</string>
+    <string name="time_error">时间有问题</string>
+</resources>

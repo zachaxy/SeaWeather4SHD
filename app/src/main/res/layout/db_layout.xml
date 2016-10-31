@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:id="@+id/db_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/db_msg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00ffe1"
+            android:gravity="center"
+            android:text="普通短信"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/db_business_msg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:text="商务信息"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/db_weather"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:text="天气信息"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <!-- 加入地步的刷新布局 -->
+
+     <RelativeLayout
+        android:id="@+id/db_rl1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/db_top">
+
+        <com.friendlyarm.Serial.view.RefreshableView
+            android:id="@+id/db_rf1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ListView
+                android:id="@+id/db_lv1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.friendlyarm.Serial.view.RefreshableView>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/db_rl2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/db_top"
+        android:visibility="invisible">
+
+        <com.friendlyarm.Serial.view.RefreshableView
+            android:id="@+id/db_rf2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+
+            <ListView
+                android:id="@+id/db_lv2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.friendlyarm.Serial.view.RefreshableView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/db_rl3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/db_top"
+        android:visibility="invisible">
+
+        <com.friendlyarm.Serial.view.RefreshableView
+            android:id="@+id/db_rf3"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <ListView
+                android:id="@+id/db_lv3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.friendlyarm.Serial.view.RefreshableView>
+
+    </RelativeLayout>
+
+</RelativeLayout>
