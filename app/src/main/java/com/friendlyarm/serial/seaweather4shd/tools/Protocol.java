@@ -12,7 +12,8 @@ public class Protocol {
 	 */
 	public static void querySDRState() {
 		byte[] b = BytesUtil.hexStringToBytes("02533203");
-		Serial.writeCom3(b);
+		//Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 		Log.d("w23主动查询状态","02533203");
 	}
 
@@ -28,7 +29,8 @@ public class Protocol {
 		String ss = "025335" + hexSounds + "03";
 		Log.d("w23音量参数", ss);
 		byte[] b = BytesUtil.hexStringToBytes(ss);
-		Serial.writeCom3(b);
+		//Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 	}
 	
 	public static void sendSounds(int i) {
@@ -43,7 +45,8 @@ public class Protocol {
 		String ss = "025335" + hexSounds + "03";
 		Log.d("w23音量参数", ss);
 		byte[] b = BytesUtil.hexStringToBytes(ss);
-		 Serial.writeCom3(b);
+		//Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 	}
 
 	/***
@@ -61,7 +64,8 @@ public class Protocol {
 				+ Integer.toHexString(s.charAt(2));
 		String ss = "025336" + hexOffset + "03";
 		byte[] b = BytesUtil.hexStringToBytes(ss);
-		 Serial.writeCom3(b);
+		 //Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 		Log.d("w23频偏参数", ss);
 	}
 
@@ -86,7 +90,8 @@ public class Protocol {
 		String ss = "025344" + hexSound + "3003";
 		byte[] b = BytesUtil.hexStringToBytes(ss);
 		Param.param = "静噪";
-		 Serial.writeCom3(b);
+		 //Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 		Log.d("setting静噪", ss);
 	}
 	/***
@@ -125,7 +130,8 @@ public class Protocol {
 
 		String ss = "025344" + hexSound + "3003";
 		byte[] b = BytesUtil.hexStringToBytes(ss);
-		 Serial.writeCom3(b);
+		// Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 		Log.d("w23静噪", ss);
 	}
 
@@ -143,14 +149,16 @@ public class Protocol {
 					+ "303103";
 			byte[] b = BytesUtil.hexStringToBytes(s);
 			Log.d("w23信道频率参数","第"+i+"信道发送的内容: "+s);
-			 Serial.writeCom3(b);
+			// Serial.writeCom3(b);
+			Param.serialPort.syncWrite(b,0);
 		}
 		hexChannel = parseChannel2Hex(channelsList.get(9));
 		String s = "02534B303039" + hexChannel + "30" + hexChannel + "303003";
 		Log.d("w23信道频率参数","第9信道发送的内容: "+s);
 		Param.param = "信道";
 		byte[] b = BytesUtil.hexStringToBytes(s);
-		 Serial.writeCom3(b);
+		 //Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 	}
 
 	public static void sendChannels(){
@@ -160,7 +168,8 @@ public class Protocol {
 		for(int i=0;i<b.length;i++){
 			System.out.println("发出去的数据是:"+b[i]);
 		}
-		 Serial.writeCom3(b);
+		 //Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 	}
 	
 	public static void sendChannels(String s,int index){
@@ -170,7 +179,8 @@ public class Protocol {
 				+ "303003";
 		byte[] b = BytesUtil.hexStringToBytes(ss);
 		Log.d("w23信道频率参数","第"+index+"信道发送的内容: "+ss);
-		 Serial.writeCom3(b);
+		// Serial.writeCom3(b);
+		Param.serialPort.syncWrite(b,0);
 	}
 	
 	private static String parseChannel2Hex(String s) {
@@ -186,7 +196,8 @@ public class Protocol {
 	private static final byte[] unlinkdata = BytesUtil.hexStringToBytes("02414303");
 	
 	public static void autoUnlink(){
-		 Serial.writeCom3(unlinkdata);
+		// Serial.writeCom3(unlinkdata);
+		Param.serialPort.syncWrite(unlinkdata,0);
 	}
 
 	

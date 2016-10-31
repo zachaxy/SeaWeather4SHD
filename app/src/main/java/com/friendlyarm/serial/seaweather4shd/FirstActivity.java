@@ -3,8 +3,15 @@ package com.friendlyarm.serial.seaweather4shd;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.hardware.usb.UsbDevice;
+import android.hardware.usb.UsbDeviceConnection;
+import android.hardware.usb.UsbManager;
 import android.os.Handler;
 import android.os.Message;
 
@@ -13,17 +20,24 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.felhr.usbserial.UsbSerialDevice;
+import com.felhr.usbserial.UsbSerialInterface;
 import com.friendlyarm.serial.seaweather4shd.R;
 import com.friendlyarm.serial.seaweather4shd.dao.MyDatabaseHelper;
+import com.friendlyarm.serial.seaweather4shd.tools.BytesUtil;
 import com.friendlyarm.serial.seaweather4shd.tools.Param;
 import com.friendlyarm.serial.seaweather4shd.tools.Perf;
 import com.friendlyarm.serial.seaweather4shd.tools.Protocol;
 import com.friendlyarm.serial.seaweather4shd.tools.Serial;
 import com.friendlyarm.serial.seaweather4shd.tools.SysApplication;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class FirstActivity extends Activity {
@@ -38,7 +52,44 @@ public class FirstActivity extends Activity {
     // 用来拼接从串口接收来的数据
     StringBuilder sb0 = new StringBuilder();
 
-    FirstInitThread mFirstInitThread;
+    //FirstInitThread mFirstInitThread;  解析数据的线程,不用了
+
+    //#########    与usb相关的部分   ############
+    //自定义广播的action,标识用户是否点击了连接usb选项
+    final String ACTION_USB_PERMISSION = "com.android.fh.USB_PERMISSION";
+
+    //为handler设置的选项
+    final int FH_USB_OK = 100;
+    final int FH_USB_NOK = 101;
+
+    private UsbManager usbManager;
+    private UsbDevice device;
+    private UsbDeviceConnection connection;
+
+    //用来接收usb发来的消息.
+    private StringBuilder receiveParamAckBuilder = new StringBuilder();
+
+    private ReadThread readThread = new ReadThread();
+
+
+    BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(ACTION_USB_PERMISSION)) {
+                boolean granted = intent.getExtras().getBoolean(UsbManager.EXTRA_PERMISSION_GRANTED);
+                if (granted) {
+                    //用户允许连接usb;
+                    connection = usbManager.openDevice(device);
+                    //启动usb连接线程
+                    new ConnectionThread().start();
+                } else {
+                    Toast.makeText(FirstActivity.this, "用户拒绝连接USB设备!\n请重新连接USB设备并重启本程序!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +97,15 @@ public class FirstActivity extends Activity {
         setContentView(R.layout.activity_first);
         SysApplication.getInstance().addActivity(this);
         initViews();
-        openComs();
+        //openComs();
         initConf();
         //initDB();
-        mFirstInitThread = new FirstInitThread();
-        mFirstInitThread.start();
+        //注册usb广播
+        setFilter();
+
+        //查找设备
+        findSerialPortDevice();
+
         querySRD();
 
 
@@ -102,7 +157,8 @@ public class FirstActivity extends Activity {
                                             public void onClick(
                                                     DialogInterface dialog,
                                                     int which) {
-                                                mFirstInitThread.interrupt();
+                                                //mFirstInitThread.interrupt();
+                                                destroySource();
                                                 finish();
                                                 System.exit(0);
                                             }
@@ -117,7 +173,7 @@ public class FirstActivity extends Activity {
                         AlertDialog.Builder dialog2 = new AlertDialog.Builder(
                                 FirstActivity.this);
                         dialog2.setTitle("SDR无响应")
-                                .setMessage("SDR无响应,xxxxxx")
+                                .setMessage("接收机内部错误!")
                                 .setPositiveButton("再次查询",
                                         new DialogInterface.OnClickListener() {
                                             @Override
@@ -127,7 +183,7 @@ public class FirstActivity extends Activity {
                                                 //TODO:!!!!!!!!!!!!!!!!!!!
                                                 querySRD();
                                             /*Intent intent = new Intent(FirstActivity.this,MainActivity.class);
-											startActivity(intent);
+                                            startActivity(intent);
 											finish();*/
                                             }
                                         })
@@ -137,7 +193,8 @@ public class FirstActivity extends Activity {
                                             public void onClick(
                                                     DialogInterface dialog,
                                                     int which) {
-                                                mFirstInitThread.interrupt();
+                                                //mFirstInitThread.interrupt();
+                                                destroySource();
                                                 finish();
                                                 System.exit(0);
                                             }
@@ -152,9 +209,11 @@ public class FirstActivity extends Activity {
                         tv5.setText(String.valueOf(index) + "/10");
                         img4.setImageResource(R.drawable.ok);
                         if (index == 10) {
-                            mFirstInitThread.interrupt();
+                            //mFirstInitThread.interrupt();
+                            destroySource();
                             Intent intent = new Intent(FirstActivity.this, MainActivity.class);
                             startActivity(intent);
+                            finish();
                         }
                         break;
                     case 0x05:
@@ -178,10 +237,11 @@ public class FirstActivity extends Activity {
                                             public void onClick(
                                                     DialogInterface dialog,
                                                     int which) {
-											/*
-											 * finish(); System.exit(0);
+                                            /*
+                                             * finish(); System.exit(0);
 											 */
-                                                mFirstInitThread.interrupt();
+                                                //mFirstInitThread.interrupt();
+                                                destroySource();
                                                 Intent intent = new Intent(FirstActivity.this, MainActivity.class);
                                                 startActivity(intent);
                                             }
@@ -194,7 +254,7 @@ public class FirstActivity extends Activity {
                         AlertDialog.Builder dialog4 = new AlertDialog.Builder(
                                 FirstActivity.this);
                         dialog4.setTitle("信道" + msg.arg1 + "设置无法响应")
-                                .setMessage("信道设置无法响应,您可以选择继续设置接收机频率,或者退出程序,联系管理员!")
+                                .setMessage("信道设置无法响应,您可以选择继续设置接收机频率,或者退出程序,并联系管理员!")
                                 .setPositiveButton("再次设置",
                                         new DialogInterface.OnClickListener() {
                                             @Override
@@ -211,7 +271,8 @@ public class FirstActivity extends Activity {
                                             public void onClick(
                                                     DialogInterface dialog,
                                                     int which) {
-                                                mFirstInitThread.interrupt();
+                                                //mFirstInitThread.interrupt();
+                                                destroySource();
                                                 finish();
                                                 System.exit(0);
                                             }
@@ -220,12 +281,30 @@ public class FirstActivity extends Activity {
                         dialog4.create();
                         dialog4.show();
                         break;
+                    case FH_USB_OK:
+                        Toast.makeText(FirstActivity.this, "USB设备已连接!", Toast.LENGTH_LONG).show();
+                        tv2.setText("USB通信串口已连接");
+                        img2.setImageResource(R.drawable.ok);
+                        querySRD();
+                        break;
+                    case FH_USB_NOK:
+                        Toast.makeText(FirstActivity.this, msg.obj.toString(), Toast.LENGTH_LONG).show();
+                        destroySource();
+                        finish();
+                        break;
                     default:
                         break;
                 }
             }
         };
     }
+
+    private void setFilter() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_USB_PERMISSION);
+        registerReceiver(usbReceiver, filter);
+    }
+
 
     void querySRD() {
 
@@ -333,13 +412,13 @@ public class FirstActivity extends Activity {
     /***
      * 打开所需的两个串口
      */
-    private void openComs() {
+    /*private void openComs() {
         Serial.openCom1();
         Serial.openCom3();
         Log.d(TAG, "openSerials: 通信串口已经打开");
         tv2.setText("通信串口已经打开");
         img2.setImageResource(R.drawable.ok);
-    }
+    }*/
 
     /***
      * 初始化配置文件,以收集参数信息
@@ -360,7 +439,7 @@ public class FirstActivity extends Activity {
         Param.db = Param.dbHelper.getWritableDatabase();
     }
 
-    class FirstInitThread extends Thread {
+    /*class FirstInitThread extends Thread {
         public void run() {
             while (!isInterrupted()) { // 非阻塞过程中通过判断中断标志来退出
                 int m = HardwareControler.select(com.friendlyarm.Serial.tools.Serial.fd3, 0, 0);
@@ -432,5 +511,192 @@ public class FirstActivity extends Activity {
                 sb0.append(s);
             }
         }
+    }*/
+
+
+    private void findSerialPortDevice() {
+        //初始化usb管理器
+        usbManager = (UsbManager) getSystemService(Context.USB_SERVICE);
+
+        //该代码将尝试打开连接遇到的第一个USB设备.但是如果连接了一个hub,那么程序目前无法处理.
+        HashMap<String, UsbDevice> usbDevices = usbManager.getDeviceList();
+        if (!usbDevices.isEmpty()) {
+            for (Map.Entry<String, UsbDevice> entry : usbDevices.entrySet()) {
+                device = entry.getValue();
+                int deviceVID = device.getVendorId();
+                int devicePID = device.getProductId();
+
+                //if条件中满足的情况是一个usb hub,不做处理
+                if (deviceVID != 0x1d6b && (devicePID != 0x0001 && devicePID != 0x0002 && devicePID != 0x0003)) {
+                    // There is a device connected to our Android device. Try to open it as a Serial Port.
+                    requestUserPermission();
+                    break;
+                } else {
+                    Toast.makeText(this, "不能识别的USB设备!\n请检查设别连接并重新启动本程序!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
+            }
+        } else {
+            //此时并没有发现usb设备
+            Toast.makeText(this, "未检测到USB设备!\n请检查设别连接并重新启动本程序!", Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
+    private void requestUserPermission() {
+        //预intent,在接下来展示的是否连接usb的选项中,无论选择是/否,都会发送一个ACTION_USB_PERMISSION的广播,接下来在广播接收函数中再判断是否已连接usb;
+        PendingIntent mPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        //会弹出确认连接的对话框
+        usbManager.requestPermission(device, mPendingIntent);
+    }
+
+    private class ConnectionThread extends Thread {
+
+        @Override
+        public void run() {
+            //得到一个具体的子类 串口设备子类这里是CP2102SerialDevice的对象.
+            Param.serialPort = UsbSerialDevice.createUsbSerialDevice(device, connection);
+            if (Param.serialPort != null) {
+                if (Param.serialPort.syncOpen()) {
+                    Param.serialPort.setBaudRate(Param.BAUD_RATE);
+                    Param.serialPort.setDataBits(UsbSerialInterface.DATA_BITS_8);
+                    Param.serialPort.setStopBits(UsbSerialInterface.STOP_BITS_1);
+                    Param.serialPort.setParity(UsbSerialInterface.PARITY_NONE);
+
+                    Param.serialPort.setFlowControl(UsbSerialInterface.FLOW_CONTROL_OFF);
+                    //设置USB的读回调函数
+                    Param.serialPort.read(mCallback);
+
+                    readThread.start();
+
+
+                    h1.obtainMessage(FH_USB_OK).sendToTarget();
+                } else {
+                    //串口无法打开,可能发生了IO错误或者被认为是CDC,但是并不适合本应用,不做处理.
+                    h1.obtainMessage(FH_USB_NOK, "USB设备IO错误,请重新连接!!!").sendToTarget();
+                }
+            } else {
+                //设备无法打开,即便是CDC的驱动也无法加载,不作处理.
+                h1.obtainMessage(FH_USB_NOK, "USB设备无法打开,请重新连接!!!").sendToTarget();
+            }
+        }
+    }
+
+    //设置usb读取数据解析的方法.这里只解析接收机ack/nack,该函数不在主线程中,更新UI要注意!!!
+    private UsbSerialInterface.UsbReadCallback mCallback = new UsbSerialInterface.UsbReadCallback() {
+        @Override
+        public void onReceivedData(byte[] arg0) {
+            Log.e("###", "1同步方法不会调用这个函数!!!!!!!!");
+            // FIXME: 2016/10/31 使用同步的方法接受数据,绝对不会调用该方法,如果调用将是致命错误!!!
+        }
+    };
+
+    private class ReadThread extends Thread {
+        private AtomicBoolean working;
+
+        ReadThread() {
+            working = new AtomicBoolean(true);
+        }
+
+        public void stopReadThread() {
+            working.set(false);
+        }
+
+        @Override
+        public void run() {
+            while (working.get()) {
+                byte[] buffer = new byte[100];
+                int n = Param.serialPort.syncRead(buffer, 0);
+                if (n > 0) {
+                    byte[] received = new byte[n];
+                    System.arraycopy(buffer, 0, received, 0, n);
+                    String data = BytesUtil.bytesToHexString(received);
+                    if (data == null) {
+                        continue;
+                    }
+                    Log.e("###", data);
+                    receiveParamAckBuilder.append(data);
+                    int begin8383Index = -1;
+                    int end8383Index = -1;
+                    while ((begin8383Index = receiveParamAckBuilder.indexOf("c0b0b1b2")) >= 0) {
+
+                        end8383Index = receiveParamAckBuilder.indexOf("c0", begin8383Index + 8);
+
+                        while (end8383Index > 0 && end8383Index % 2 != 0) {
+                            end8383Index = receiveParamAckBuilder.indexOf("c0", end8383Index + 2);
+                        }
+
+                        if (end8383Index % 2 == 0) {
+                            String paramStr = receiveParamAckBuilder.substring(begin8383Index + 8, end8383Index);
+                            // TODO: 2016/9/25 0025 将来考虑把解析的函数放在另一个线程中,该线程中使用一个阻塞队列<String>;
+                            parseParamData(paramStr);
+                            receiveParamAckBuilder.delete(0, end8383Index + 2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void parseParamData(final String src) {
+        if (src.startsWith("02") && src.endsWith("03")) {
+            switch (src) {
+                case "0273313103": //sdr正常
+                    // SDR正常回复
+                    Param.SDRAck = 1;
+                    Log.e("setting", "SRD正常回复");
+                    break;
+                case "0273313003": //sdr异常
+                    // SDR错误回复
+                    Param.SDRAck = 0;
+                    break;
+                case "020603":  //ack
+                    /*h1.removeMessages(FH_FREQ_NO_RESPONSE);
+                    currentFreqIndex++;
+                    h1.obtainMessage(FH_FREQ_ACK, currentFreqIndex).sendToTarget();
+                    //存在这样一种情况,当前的index==10,原本的想法是也发送给handler,判断10跳转
+                    //但是下面的sendFre函数也会执行,异步的...
+                    if (currentFreqIndex < 10) {
+                        sendFreqs(currentFreqIndex);
+                    }*/
+                    // Param.ack = 1;
+                    if (Param.ChannelAck == -2) {
+                        Log.e("setting串口2init", "信道 ack置为1了");
+                        Param.ChannelAck = 1;
+                    }
+                    break;
+                case "021503": //nak
+                    if (Param.ChannelAck == -2) {
+                        Log.e("setting串口2init", "信道 ack置为1了");
+                        Param.ChannelAck = 1;
+                    }
+                    break;
+
+            }
+        } else {
+            //handler:未知的异常回复.
+            //h1.obtainMessage(FH_UNKNOWN_MSG).sendToTarget();
+            Log.e(TAG, "parseParamData: 位置的参数回复" + src);
+        }
+
+    }
+
+    /***
+     * 跳过生命周期的管理;
+     */
+    void destroySource() {
+        unregisterReceiver(usbReceiver);
+        //mFHApplication.serialPort.close();
+        Log.e("###", "destroySource: 关闭!");
+        readThread.stopReadThread();
+        Param.serialPort.syncClose();
+    }
+
+    // TODO: 2016/9/9 0009 不知道弹框后是否给正在发送消息的信道产生什么影响,所以此处直接退出程序;
+    //会执行onDestroy方法;
+    @Override
+    public void onBackPressed() {
+        destroySource();
+        super.onBackPressed();
     }
 }

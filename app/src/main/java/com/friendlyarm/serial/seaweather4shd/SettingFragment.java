@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/*import com.friendlyarm.Serial.tools.Param;
-import com.friendlyarm.Serial.tools.Perf;
-import com.friendlyarm.Serial.tools.Protocol;*/
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
