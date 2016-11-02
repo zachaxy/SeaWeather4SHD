@@ -99,7 +99,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //Param.MSGList
 
 		/*openComs();
-		initConf();*/
+        initConf();*/
         initDB();
         Cursor cursor = Param.db.query("tmpMSG", null, null, null, null, null, null);
         if (cursor.moveToLast()) {
@@ -243,6 +243,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             //mFHApplication.serialPort.close();
                             Param.serialPort.syncClose();
                         }
+                        mapFragment.tts.stop();
+                        mapFragment.tts.shutdown();
                         mapFragment.mReadThread.stopReadThread();
                         mapFragment.mParseParamThread.stopParseParamThread();
                         Param.totalFlag = false;

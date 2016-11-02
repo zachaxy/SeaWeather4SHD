@@ -118,7 +118,7 @@ public class Param {
 	 * Locater(9, 178), new Locater(58, 102), new Locater(132, 187), new
 	 * Locater(184, 140) };
 	 */
-    public static final Locater[] seaAreas = {new Locater(0, 0),
+    /*public static final Locater[] seaAreas = {new Locater(0, 0),
             new Locater(-169, -182), new Locater(-40, -190),
             new Locater(99, -191), new Locater(169, -54),
             new Locater(12, -131), new Locater(-137, -92),
@@ -126,7 +126,29 @@ public class Param {
             new Locater(-41, -49), new Locater(83, -17), new Locater(133, 50),
             new Locater(13, 37), new Locater(-79, 63), new Locater(-138, 108),
             new Locater(-164, 189), new Locater(6, 175), new Locater(55, 99),
-            new Locater(129, 184), new Locater(181, 137)};
+            new Locater(129, 184), new Locater(181, 137)};*/
+    public static final Locater[] seaAreas = {
+            new Locater(0, 0),
+            new Locater(-275,-296),
+            new Locater(-64,-309),
+            new Locater(164,-310),
+            new Locater(279,-86),
+            new Locater(22,-212),
+            new Locater(-223,-148),
+            new Locater(-333,-143),
+            new Locater(-321,74),
+            new Locater(-65,-78),
+            new Locater(139,-26),
+            new Locater(221,84),
+            new Locater(24,63),
+            new Locater(-127,106),
+            new Locater(-224,179),
+            new Locater(-267,312),
+            new Locater(12,289),
+            new Locater(93,164),
+            new Locater(214,304),
+            new Locater(299,227)
+    };
 
     public static Bitmap[] seaAreasWeatherType = new Bitmap[20];
 
