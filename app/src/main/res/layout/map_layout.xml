@@ -5,7 +5,7 @@
     android:gravity="center"
     android:orientation="horizontal" >
 
-    <com.friendlyarm.Serial.view.ZoomImageView
+    <com.friendlyarm.serial.seaweather4shd.view.ZoomImageView
         android:id="@+id/zoomImg"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -136,7 +136,7 @@
             android:layout_height="1dp"
             android:background="#a7a4a4" />
  <!-- 注释..... -->
-        <com.friendlyarm.Serial.view.MarqueenTextView
+        <com.friendlyarm.serial.seaweather4shd.view.MarqueenTextView
             android:id="@+id/new_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

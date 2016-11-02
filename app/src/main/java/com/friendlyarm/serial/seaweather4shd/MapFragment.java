@@ -55,7 +55,9 @@ import com.friendlyarm.serial.seaweather4shd.tools.Tools;
 import com.friendlyarm.serial.seaweather4shd.view.MarqueenTextView;
 import com.friendlyarm.serial.seaweather4shd.view.ZoomImageView;
 
+import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.data;
+import static android.R.attr.elegantTextHeight;
 import static com.friendlyarm.serial.seaweather4shd.R.drawable.show;
 import static com.friendlyarm.serial.seaweather4shd.tools.Param.serialPort;
 
@@ -67,7 +69,7 @@ public class MapFragment extends Fragment {
     private ZoomImageView zoomImageView;
 
     private MarqueenTextView mNewMsg;
-    private TextToSpeech tts;
+    public TextToSpeech tts;
     private ListView mMsgList;
     private MsgAdapter adapter;
 
@@ -246,14 +248,12 @@ public class MapFragment extends Fragment {
                                             public void run() {
                                                 if (count > 0) {
                                                     if (Param.SoundAck == 1) {
-                                                        Log.d("setting",
-                                                                "静噪设置响应ack,t2将被取消");
+                                                        Log.e("###setting","静噪设置响应ack,t2将被取消");
                                                         h1.sendEmptyMessage(20);
                                                         t2.cancel();
                                                         count = -1;
                                                     } else if (Param.SoundAck == 0) {
-                                                        Log.d("setting",
-                                                                "静噪设置响应nack,t2将被取消");
+                                                        Log.e("###setting", "静噪设置响应nack,t2将被取消");
                                                         h1.sendEmptyMessage(21);
                                                         t2.cancel();
                                                         count = -1;
@@ -261,7 +261,7 @@ public class MapFragment extends Fragment {
                                                 }
 
                                                 if (count == 3) {
-                                                    Log.d("setting",
+                                                    Log.e("###setting",
                                                             "静噪设置无响应,t2将被取消");
                                                     h1.sendEmptyMessage(22);
                                                     t2.cancel();
@@ -346,12 +346,12 @@ public class MapFragment extends Fragment {
                                                 public void run() {
                                                     if (count > 0) {
                                                         if (Param.SoundsAck == 1) {
-                                                            Log.d("setting",
+                                                            Log.e("###setting",
                                                                     "音量设置响应ack");
                                                             h1.sendEmptyMessage(20);
                                                             t3.cancel();
                                                         } else if (Param.SoundsAck == 0) {
-                                                            Log.d("setting",
+                                                            Log.e("###setting",
                                                                     "音量设置响应nack");
                                                             h1.sendEmptyMessage(21);
                                                             t3.cancel();
@@ -359,7 +359,7 @@ public class MapFragment extends Fragment {
                                                     }
 
                                                     if (count == 3) {
-                                                        Log.d("setting",
+                                                        Log.e("###setting",
                                                                 "音量设置无响应");
                                                         h1.sendEmptyMessage(22);
                                                         t3.cancel();
@@ -431,35 +431,35 @@ public class MapFragment extends Fragment {
                             // Log.d("get", "获取到当前的key是:  " + k);
                             Information info = entry.getValue();
                             if (info.flag) {
-                                Log.d("get", "flag里不包含0,表明已经信息已收集完整");
+                                Log.e("###get", "flag里不包含0,表明已经信息已收集完整");
                                 key = k;
                             } else if (info.n == 3) {
                                 if (info.bflag[0] == '1') {
-                                    Log.d("get", "已经明确的发了三遍了,可是信息不完整,还好头消息还在");
+                                    Log.e("###get", "已经明确的发了三遍了,可是信息不完整,还好头消息还在");
                                     key = k;
                                 } else {
-                                    Log.d("get", "已经明确发了三遍了,但是头消息任然不完整,直接舍弃");
+                                    Log.e("###get", "已经明确发了三遍了,但是头消息任然不完整,直接舍弃");
                                     infoMap.remove(k);
                                 }
                             } else if ((System.currentTimeMillis() - info.start) / 1000 >= info.waitSeconds) {
-                                Log.d("get", "第三遍还未收到,但是已经超时"
+                                Log.e("###get", "第三遍还未收到,但是已经超时"
                                         + info.waitSeconds + "s");
-                                Log.d("get", "此时info的消息是: count->" + info.count
+                                Log.e("###get", "此时info的消息是: count->" + info.count
                                         + "  发送次数->" + info.n + "  消息列表中的数量->"
                                         + info.list.size() + "  发送的标志->"
                                         + new String(info.bflag));
                                 if (info.bflag[0] == '1') {
-                                    Log.d("get", "已经明确的发了三遍了,可是信息不完整,还好头消息还在");
+                                    Log.e("###get", "已经明确的发了三遍了,可是信息不完整,还好头消息还在");
                                     key = k;
                                 } else {
-                                    Log.d("get", "已经明确发了三遍了,但是头消息任然不完整,直接舍弃");
+                                    Log.e("###get", "已经明确发了三遍了,但是头消息任然不完整,直接舍弃");
                                     infoMap.remove(k);
                                 }
                             }
                             // TODO:每次解决完一个消息就处理一下.
                             if (key != "") {
                                 out = infoMap.remove(key);
-                                Log.d("get获取到的key是", "run: " + key);
+                                Log.e("###get获取到的key是", "run: " + key);
                                 StringBuilder sb = new StringBuilder();
                                 /*
                                  * for (String s : out.list) { sb.append(s); }
@@ -472,7 +472,7 @@ public class MapFragment extends Fragment {
                                         break;
                                     }
                                 }
-                                Log.d("get获取到的内容是", sb.toString());
+                                Log.e("###get获取到的内容是", sb.toString());
                                 byte[] realData = BytesUtil.hexStringToBytes(sb
                                         .toString());
                                 Log.e("###", "添加进已接收列表的时间戳是:" + key);
@@ -529,7 +529,7 @@ public class MapFragment extends Fragment {
             }
             switch (msg.what) {
                 case 11:
-                    Log.d("@@@", "检测到处理信息");
+                    Log.e("###", "检测到处理信息");
                     adapter.notifyDataSetChanged();
                     mMsgList.setAdapter(adapter);
                     String show;
@@ -552,7 +552,7 @@ public class MapFragment extends Fragment {
                     char[] c = Param.mDate.toCharArray();
                     String date_text = BytesUtil.formatTime(c);
 
-                    Log.e("setting", "收到的注册时间是:" + date_text);
+                    Log.e("###setting", "收到的注册时间是:" + date_text);
                     date.setText(date_text);
                     // 已经在handler发送msg之前就已经修改过pref里的数据
                     break;
@@ -593,10 +593,10 @@ public class MapFragment extends Fragment {
                     if (Param.param.equals("静噪")) {
                         Param.mSound = tmpState;
                         if (tmpState) {
-                            Log.d("###善后", "设置成on");
+                            Log.e("###善后", "设置成on");
                             sound.setImageResource(R.drawable.sound_on);
                         } else {
-                            Log.d("###善后", "设置成off");
+                            Log.e("###善后", "设置成off");
                             sound.setImageResource(R.drawable.sound_off);
                         }
                         Perf.editor.putBoolean(Perf.P_SOUND, tmpState);
@@ -724,7 +724,7 @@ public class MapFragment extends Fragment {
     }
 
     public class ReadThread extends Thread {
-        private AtomicBoolean working;
+        private AtomicBoolean working = new AtomicBoolean();
 
         ReadThread() {
             working = new AtomicBoolean(true);
@@ -751,18 +751,21 @@ public class MapFragment extends Fragment {
 
                     while ((begin8383Index = sb.indexOf("c0b0b1b2")) >= 0) {
 
-                        end8383Index = sb.indexOf("c0", begin8383Index + 8);
+                        end8383Index = sb.indexOf("c0", begin8383Index + 12);
 
                         while (end8383Index > 0 && end8383Index % 2 != 0) {
                             end8383Index = sb.indexOf("c0", end8383Index + 2);
                         }
 
-                        if (end8383Index % 2 == 0) {
+                        if (end8383Index % 2 != 0) {
+                            break;
+                        }
+                       // if (end8383Index % 2 == 0) {
                             String paramStr = sb.substring(begin8383Index + 8, end8383Index);
                             // TODO: 2016/9/25 0025 将来考虑把解析的函数放在另一个线程中,该线程中使用一个阻塞队列<String>;
                             queue.add(paramStr);
-                            sb.delete(0, end8383Index + 2);
-                        }
+                            sb.delete(begin8383Index, end8383Index + 2);
+                        //}
                     }
 
                     int begin8303Index = 0; // 8303包对应的起始位置
@@ -786,16 +789,16 @@ public class MapFragment extends Fragment {
                             Log.e("###", "已检测到8303包");
                             StringBuilder data = new StringBuilder();
                             text = text.substring(20, text.length() - 20);
-                            // Log.d("###", "在8303和8304之间的包是-->" + text);
+                            // Log.e("###", "在8303和8304之间的包是-->" + text);
                             if (text.startsWith("c0") && text.endsWith("c0")) {
-                                Log.d("###", "进入8303与8304之间的数据是以c0--c0");
+                                Log.e("###", "进入8303与8304之间的数据是以c0--c0");
 
                                 // 目前这个转换顺序是正确的
                                 text = Tools.transferReplace(text, "dbdc", "c0");
                                 text = Tools.transferReplace(text, "dbdd", "db");
                                 // 执行了第一次替换,接下来从text中取出数据
                                 while (text.length() > 0) {
-                                    // Log.d("###", "将text进行截断,可能会陷入死循环!!!");
+                                    // Log.e("###", "将text进行截断,可能会陷入死循环!!!");
                                     if (text.startsWith("c0a0")) {
                                         if (text.indexOf("828184") == 6) {
                                             // 判断是不是是真正的数据包!!!
@@ -834,17 +837,17 @@ public class MapFragment extends Fragment {
                                     int i, k;
                                     i = Tools.findSilpBagHead(frameString);
                                     k = Tools.findSilpBagTail(i, frameString);
-                                    Log.d("###", i + "<-->" + k);
+                                    Log.e("###", i + "<-->" + k);
                                     if (i >= k) {
-                                        Log.d("###", "i>=k");
+                                        Log.e("###", "i>=k");
                                         break;
                                     }
                                     if (i % 2 != 0) {
-                                        Log.d("###", "i%2!=0");
+                                        Log.e("###", "i%2!=0");
                                         break;
                                     }
                                     if (k % 2 != 0) {
-                                        Log.d("###", "k%2!=0");
+                                        Log.e("###", "k%2!=0");
                                         break;
                                     }
 
@@ -888,11 +891,11 @@ public class MapFragment extends Fragment {
 
                                     if (BytesUtil.bytesToHexString(tmp2) == null
                                             || BytesUtil.bytesToHexString(tmp1) == null) {
-                                        Log.d("###", "tmp2或者tmp1是null,直接丢弃");
+                                        Log.e("###", "tmp2或者tmp1是null,直接丢弃");
                                         break;
                                     }
 
-                                    // Log.d("w23",BytesUtil.bytesToHexString(tmp2));
+                                    // Log.e("w23",BytesUtil.bytesToHexString(tmp2));
                                     // 只有crc1和crc2的校验均正确,那么这一帧可用
                                     if (checkCRC(tmp1) && checkCRC(tmp2, oCrc)) {
                                         // if (true) {
@@ -909,11 +912,11 @@ public class MapFragment extends Fragment {
                                         count = Integer.valueOf(BytesUtil.bytesToHexString(new byte[]{tmp1[6], tmp1[7]}), 16);
                                         index = Integer.valueOf(BytesUtil.bytesToHexString(new byte[]{tmp1[8], tmp1[9]}), 16) - 1;
                                         if (hasReceivedBefore.contains(time)) {
-                                            Log.e("tmp", "之前收到过相同的时间戳,直接舍弃->" + time);
+                                            Log.e("###", "之前收到过相同的时间戳,直接舍弃->" + time);
                                             System.out.println("之前收到过相同的时间戳,直接舍弃->" + time);
                                             break;
                                         }
-                                        Log.d("tmp", "第" + index + "帧中解析到的time是:" + time);
+                                        Log.e("###", "第" + index + "帧中解析到的time是:" + time);
                                         if (infoMap.containsKey(time)) {
                                             if (infoMap.get(time).bflag[index] == '0') {
                                                 infoMap.get(time).list.set(index, BytesUtil.bytesToHexString(tmp2));
@@ -922,7 +925,7 @@ public class MapFragment extends Fragment {
                                                 Log.e("tmp", "未收集的包:" + index);
                                             }
                                         } else {
-                                            Log.d("tmp", "新的消息,需要加入到map中,新创建一个info对象,time和count是" + time + "--" + count);
+                                            Log.e("###", "新的消息,需要加入到map中,新创建一个info对象,time和count是" + time + "--" + count);
                                             Information info = new Information(time, count);
                                             info.start = System.currentTimeMillis();
                                             info.list.set(index, BytesUtil.bytesToHexString(tmp2));
@@ -931,7 +934,7 @@ public class MapFragment extends Fragment {
                                             } else {
                                                 info.waitSeconds = 3 * count * 2 + 20;
                                             }
-                                            Log.e("tmp", "未收集的包:" + index + "  需要等待的时间是:" + info.waitSeconds);
+                                            Log.e("###", "未收集的包:" + index + "  需要等待的时间是:" + info.waitSeconds);
                                             info.setFlag(index);
                                             infoMap.put(time, info);
                                         }
@@ -956,7 +959,7 @@ public class MapFragment extends Fragment {
                                             info.waitSeconds = (2 * count - index) * 2 + 10;
                                         }
                                     }
-                                    Log.e("tmp", "第" + info.n + "次,将等待时间改为:" + info.waitSeconds);
+                                    Log.e("###", "第" + info.n + "次,将等待时间改为:" + info.waitSeconds);
                                 }
                             }
                         }
@@ -968,7 +971,7 @@ public class MapFragment extends Fragment {
     }
 
     public class ParseParamThread extends Thread {
-        private AtomicBoolean working;
+        private AtomicBoolean working = new AtomicBoolean();
         BlockingQueue<String> queue;
 
         ParseParamThread(BlockingQueue<String> queue) {
@@ -1018,7 +1021,7 @@ public class MapFragment extends Fragment {
                             break;
                         }
                         Param.mDTR = new String(BytesUtil.hexStringToBytes(s.substring(6, 16)));
-                        // Log.d("setting信道速率", Param.mDTR);
+                        // Log.e("###setting信道速率", Param.mDTR);
                         h1.sendEmptyMessage(12);
                     } else if (s.startsWith("027336")) {
                         // 信噪比,没有吐
@@ -1033,23 +1036,23 @@ public class MapFragment extends Fragment {
                     } else if (s.startsWith("020603")) {
                         // Param.ack = 1;
                         if (Param.SoundAck == -2) {
-                            Log.e("setting", "已经将静噪ack置为1了");
+                            Log.e("###setting", "已经将静噪ack置为1了");
                             Param.SoundAck = 1;
                         } else if (Param.SoundsAck == -2) {
-                            Log.e("setting", "已经将声音ack置为1了");
+                            Log.e("###setting", "已经将声音ack置为1了");
                             Param.SoundsAck = 1;
                         } else if (Param.SDRAck == -2) {
-                            Log.e("setting", "SDR ack置为1了");
+                            Log.e("###setting", "SDR ack置为1了");
                             Param.SDRAck = 1;
                         } else if (Param.ChannelAck == -2) {
-                            Log.e("setting", "信道 ack置为1了");
+                            Log.e("###setting", "信道 ack置为1了");
                             Param.ChannelAck = 1;
                         }
                     } else if (s.startsWith("021503")) {
                         Param.ack = 0;
                     } else {
                         // 未知的消息类型
-                        Log.e("setting", "未知的消息.严重的错误!!!!!!" + s);
+                        Log.e("###setting", "未知的消息.严重的错误!!!!!!" + s);
                         break;
                     }
                 } catch (InterruptedException e) {
@@ -1065,10 +1068,10 @@ public class MapFragment extends Fragment {
      */
     private void parseMSG(String time, byte[] b) {
         int infoType = b[0];
-        Log.d("###", "消息类型是:" + infoType);
+        Log.e("###", "消息类型是:" + infoType);
         byte[] bID = {b[1], b[2]};
         int userID = Integer.valueOf(BytesUtil.bytesToHexString(bID), 16);
-        Log.d("###", "用户ID是:" + userID);
+        Log.e("###", "用户ID是:" + userID);
         int isClearTyphoon = b[3];
         if (isClearTyphoon == 1) {
             Param.IsTyphonClear = true;
@@ -1080,13 +1083,13 @@ public class MapFragment extends Fragment {
             case 1:
                 // TODO:短消息,发送方的手机号码如何处理?
                 if ((userID != 0) && (Param.mUsrID != userID)) {
-                    Log.d("###", "不是群发,不是本机ID,舍弃");
+                    Log.e("###", "不是群发,不是本机ID,舍弃");
                     break;
                 }
 
                 if ((Param.mUsrID == userID)
                         && (Long.valueOf(time) > Long.valueOf(Param.mDate))) {
-                    Log.d("###", "是本机ID,但是已过期,舍弃");
+                    Log.e("###", "是本机ID,但是已过期,舍弃");
                     break;
                 }
                 String content1 = "";
@@ -1125,12 +1128,12 @@ public class MapFragment extends Fragment {
                 // 一般气象消息
                 if ((userID != 0)
                         && (Long.valueOf(time) > Long.valueOf(Param.mDate))) {
-                    Log.d("###", "超时舍弃");
+                    Log.e("###", "超时舍弃");
                     break;
                 }
 
 			/*
-			 * if ((Param.mUsrID == userID) && (Long.valueOf(time) >
+             * if ((Param.mUsrID == userID) && (Long.valueOf(time) >
 			 * Long.valueOf(Param.mDate))) { Log.d("###", "是本机ID,但是已过期,舍弃");
 			 * break; }
 			 */
@@ -1188,7 +1191,7 @@ public class MapFragment extends Fragment {
             case 4:
                 if ((userID != 0)
                         && (Long.valueOf(time) > Long.valueOf(Param.mDate))) {
-                    Log.d("###", "超时舍弃");
+                    Log.e("###", "超时舍弃");
                     break;
                 }
 
@@ -1331,7 +1334,7 @@ public class MapFragment extends Fragment {
             // TODO Auto-generated catch block
             Log.e("###", "天气类型中的内容不能转化为中文!!!");
         }
-        Log.d("###", "天气中的内容是:" + text);
+        Log.e("###", "天气中的内容是:" + text);
         weather = new Weather(weatherType, area, windPower1, windPower2,
                 windDire1, windDire2, text);
     }
@@ -1346,7 +1349,7 @@ public class MapFragment extends Fragment {
         Log.e("###", "!!!收到的坐标:" + BytesUtil.bytesToHexString(by));
         int x = Integer.valueOf(BytesUtil.bytesToHexString(bx), 16);
         int y = Integer.valueOf(BytesUtil.bytesToHexString(by), 16);
-        Log.d("###", "台风坐标(" + x + "," + y + ")" + ", 台风代号:" + typhoonNo);
+        Log.e("###", "台风坐标(" + x + "," + y + ")" + ", 台风代号:" + typhoonNo);
         Locater locater = Tools.transferLocate(new Locater(x, y));
 
         int tWindPower1 = (data[9] >> 4) & 0x0f;
@@ -1363,10 +1366,10 @@ public class MapFragment extends Fragment {
 
         // ArrayList<Locater> list = null;
         if (Param.typhoonMap.containsKey(typhoonNo)) {
-            Log.d("###", "当前台风以存在");
+            Log.e("###", "当前台风以存在");
             Param.typhoonMap.get(typhoonNo).add(locater);
         } else {
-            Log.d("###", "新台风");
+            Log.e("###", "新台风");
             ArrayList<Locater> list = new ArrayList<Locater>();
             Cursor cursor = Param.db.rawQuery(
                     "select * from typhoon where typhoonNo=?",
@@ -1379,7 +1382,7 @@ public class MapFragment extends Fragment {
                 } while (cursor.moveToNext());
             }
             cursor.close();
-            Log.d("###", "从数据库中读取到的数据个数:" + list.size());
+            Log.e("###", "从数据库中读取到的数据个数:" + list.size());
             list.add(locater);
             Param.typhoonMap.put(typhoonNo, list);
         }
@@ -1391,7 +1394,7 @@ public class MapFragment extends Fragment {
     private void parseParam(String s) {
         if (s.equals("0273313103")) {
             // SDR正确回复!!!
-            Log.d("###setting", "解析到正确的SDR回复.");
+            Log.e("###setting", "解析到正确的SDR回复.");
             Param.ack = 1;
             // h1.sendEmptyMessage(18);
         } else if (s.equals("0273313003")) {
@@ -1400,7 +1403,7 @@ public class MapFragment extends Fragment {
             // h1.sendEmptyMessage(19);
         } else if (s.equals("020603")) {
             // ack
-            Log.d("###setting", "解析到正确的ack回复.");
+            Log.e("###setting", "解析到正确的ack回复.");
             Param.ack = 1;
             // h1.sendEmptyMessage(20);
         } else if (s.equals("021503")) {
@@ -1445,15 +1448,15 @@ public class MapFragment extends Fragment {
             @Override
             public void run() {
                 // 开机主动查询
-                Log.e("setting", " " + Param.SDRAck);
+                Log.e("###setting", " " + Param.SDRAck);
                 if (count > 0) {
                     if (Param.SDRAck == 1) {
-                        Log.d("setting", "SDR响应ack,t1将被取消");
+                        Log.e("###setting", "SDR响应ack,t1将被取消");
                         h1.sendEmptyMessage(18);
                         t1.cancel();
                         count = -1;
                     } else if (Param.SDRAck == 0) {
-                        Log.d("setting", "SDR响应nack,t1将被取消");
+                        Log.e("###setting", "SDR响应nack,t1将被取消");
                         h1.sendEmptyMessage(19);
                         t1.cancel();
                         count = -1;
@@ -1461,7 +1464,7 @@ public class MapFragment extends Fragment {
                 }
 
                 if (count == 3) {
-                    Log.d("setting", "SDR无响应,t1将被取消");
+                    Log.e("###setting", "SDR无响应,t1将被取消");
                     h1.sendEmptyMessage(22);
                     t1.cancel();
                     count = -1;
@@ -1505,7 +1508,7 @@ public class MapFragment extends Fragment {
                     try {
                         mPauseLock.wait();
                     } catch (Exception e) {
-                        Log.v("thread", "fails");
+                        Log.e("###thread", "fails");
                     }
                 }
             }
@@ -1528,34 +1531,34 @@ public class MapFragment extends Fragment {
                         Information info = entry.getValue();
                         // Log.d("l3","获取到当前的info是:  "+);
                         if (info.flag) {
-                            Log.d("get", "flag里不包含0,表明已经信息已收集完整");
+                            Log.e("###get", "flag里不包含0,表明已经信息已收集完整");
                             key = k;
                         } else if (info.n == 3) {
                             if (info.bflag[0] == '1') {
-                                Log.d("get", "已经明确的发了三遍了,可是信息不完整,还好头消息还在");
+                                Log.e("###get", "已经明确的发了三遍了,可是信息不完整,还好头消息还在");
                                 key = k;
                             } else {
-                                Log.d("get", "已经明确发了三遍了,但是头消息任然不完整,直接舍弃");
+                                Log.e("###get", "已经明确发了三遍了,但是头消息任然不完整,直接舍弃");
                                 infoMap.remove(k);
                             }
                         } else if ((System.currentTimeMillis() - info.start) / 1000 >= 30) {
-                            Log.d("get", "第三遍还未收到,但是已经超时30s");
-                            Log.d("get", "此时info的消息是: count->" + info.count
+                            Log.e("###get", "第三遍还未收到,但是已经超时30s");
+                            Log.e("###get", "此时info的消息是: count->" + info.count
                                     + "  发送次数->" + info.n + "  消息列表中的数量->"
                                     + info.list.size() + "  发送的标志->"
                                     + new String(info.bflag));
                             if (info.bflag[0] == '1') {
-                                Log.d("get", "已经明确的发了三遍了,可是信息不完整,还好头消息还在");
+                                Log.e("###get", "已经明确的发了三遍了,可是信息不完整,还好头消息还在");
                                 key = k;
                             } else {
-                                Log.d("get", "已经明确发了三遍了,但是头消息任然不完整,直接舍弃");
+                                Log.e("###get", "已经明确发了三遍了,但是头消息任然不完整,直接舍弃");
                                 infoMap.remove(k);
                             }
                         }
                     }
                     if (key != "") {
                         out = infoMap.remove(key);
-                        Log.d("get获取到的key是", "run: " + key);
+                        Log.e("###get获取到的key是", "run: " + key);
                         StringBuilder sb = new StringBuilder();
                         for (String s : out.list) {
                             sb.append(s);
@@ -1630,7 +1633,7 @@ public class MapFragment extends Fragment {
                     try {
                         mPauseLock.wait();
                     } catch (Exception e) {
-                        Log.v("thread", "fails");
+                        Log.e("###thread", "fails");
                     }
                 }
             }
@@ -1654,7 +1657,7 @@ public class MapFragment extends Fragment {
                 }
                 if (isContinue) {
                     Protocol.autoUnlink();
-                    Log.d("###自动拆链", "已发送自动拆链");
+                    Log.e("###自动拆链", "已发送自动拆链");
                 }
             }
         }

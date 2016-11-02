@@ -106,7 +106,7 @@ public class FirstActivity extends Activity {
         //查找设备
         findSerialPortDevice();
 
-        querySRD();
+        //querySRD();
 
 
     }
@@ -320,7 +320,7 @@ public class FirstActivity extends Activity {
             @Override
             public void run() {
                 // 开机主动查询
-                Log.e("setting", " " + Param.SDRAck);
+                Log.e("###setting", " " + Param.SDRAck);
                 if (count > 0) {
                     if (Param.SDRAck == 1) {
                         Log.d("setting", "SDR响应ack,t1将被取消");
@@ -343,13 +343,13 @@ public class FirstActivity extends Activity {
                 }
 
                 if (count != -1) {
-                    Log.d("setting", "run: sendSDRquery");
+                    Log.e("setting", "run: sendSDRquery");
                     Protocol.querySDRState();
                     count++;
                 }
 
             }
-        }, 0, 800);
+        }, 0, 1000);
     }
 
     void sendFreqs(final int index0) {
@@ -365,7 +365,7 @@ public class FirstActivity extends Activity {
             public void run() {
                 if (count > 0) {
                     if (Param.ChannelAck == 1) {
-                        Log.d("setting", "freq:->" + index + "has been set!");
+                        Log.e("###", "freq:->" + index + "has been set!");
                         Message msgOk = new Message();
                         msgOk.what = 0x04;
                         msgOk.arg1 = index;
@@ -379,7 +379,7 @@ public class FirstActivity extends Activity {
                             flag = false;
                         }
                     } else if (Param.ChannelAck == 0) {
-                        Log.d("setting", "freq响应nack,t2将被取消");
+                        Log.e("###", "freq响应nack,t2将被取消");
                         Message msgNOK = new Message();
                         msgNOK.what = 0x05;
                         msgNOK.arg1 = index;
@@ -391,7 +391,7 @@ public class FirstActivity extends Activity {
                 }
 
                 if (count == 3) {
-                    Log.d("setting", "freq无响应,t2将被取消");
+                    Log.e("###", "freq无响应,t2将被取消");
                     Message msg = new Message();
                     msg.what = 0x06;
                     msg.arg1 = index;
@@ -406,7 +406,7 @@ public class FirstActivity extends Activity {
                     count++;
                 }
             }
-        }, 0, 800);
+        }, 0, 1000);
     }
 
     /***
@@ -592,7 +592,7 @@ public class FirstActivity extends Activity {
     };
 
     private class ReadThread extends Thread {
-        private AtomicBoolean working;
+        private AtomicBoolean working = new AtomicBoolean();
 
         ReadThread() {
             working = new AtomicBoolean(true);
@@ -614,23 +614,25 @@ public class FirstActivity extends Activity {
                     if (data == null) {
                         continue;
                     }
-                    Log.e("###", data);
+                    Log.e("###收到的数据", data);
                     receiveParamAckBuilder.append(data);
                     int begin8383Index = -1;
                     int end8383Index = -1;
                     while ((begin8383Index = receiveParamAckBuilder.indexOf("c0b0b1b2")) >= 0) {
 
                         end8383Index = receiveParamAckBuilder.indexOf("c0", begin8383Index + 8);
-
+                        //Log.e("###", "run: 判断是否有一个完整的参数包"+receiveParamAckBuilder.toString()+"   endIndex="+end8383Index);
                         while (end8383Index > 0 && end8383Index % 2 != 0) {
                             end8383Index = receiveParamAckBuilder.indexOf("c0", end8383Index + 2);
                         }
-
+                        //Log.e(TAG, "run: 死循环了吗?" );
                         if (end8383Index % 2 == 0) {
                             String paramStr = receiveParamAckBuilder.substring(begin8383Index + 8, end8383Index);
                             // TODO: 2016/9/25 0025 将来考虑把解析的函数放在另一个线程中,该线程中使用一个阻塞队列<String>;
                             parseParamData(paramStr);
                             receiveParamAckBuilder.delete(0, end8383Index + 2);
+                        }else {
+                            break;
                         }
                     }
                 }
@@ -644,7 +646,7 @@ public class FirstActivity extends Activity {
                 case "0273313103": //sdr正常
                     // SDR正常回复
                     Param.SDRAck = 1;
-                    Log.e("setting", "SRD正常回复");
+                    Log.e("###parseParamData", "SRD正常回复");
                     break;
                 case "0273313003": //sdr异常
                     // SDR错误回复
@@ -661,13 +663,13 @@ public class FirstActivity extends Activity {
                     }*/
                     // Param.ack = 1;
                     if (Param.ChannelAck == -2) {
-                        Log.e("setting串口2init", "信道 ack置为1了");
+                        Log.e("###setting串口2init", "信道 ack置为1了");
                         Param.ChannelAck = 1;
                     }
                     break;
                 case "021503": //nak
                     if (Param.ChannelAck == -2) {
-                        Log.e("setting串口2init", "信道 ack置为1了");
+                        Log.e("###setting串口2init", "信道 ack置为1了");
                         Param.ChannelAck = 1;
                     }
                     break;
@@ -676,7 +678,7 @@ public class FirstActivity extends Activity {
         } else {
             //handler:未知的异常回复.
             //h1.obtainMessage(FH_UNKNOWN_MSG).sendToTarget();
-            Log.e(TAG, "parseParamData: 位置的参数回复" + src);
+            Log.e("###", "parseParamData: 位置的参数回复" + src);
         }
 
     }

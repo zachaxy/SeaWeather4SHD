@@ -48,7 +48,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/db_top">
 
-        <com.friendlyarm.Serial.view.RefreshableView
+        <com.friendlyarm.serial.seaweather4shd.view.RefreshableView
             android:id="@+id/db_rf1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
@@ -57,7 +57,7 @@
                 android:id="@+id/db_lv1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </com.friendlyarm.Serial.view.RefreshableView>
+        </com.friendlyarm.serial.seaweather4shd.view.RefreshableView>
 
 
     </RelativeLayout>
@@ -69,7 +69,7 @@
         android:layout_below="@id/db_top"
         android:visibility="invisible">
 
-        <com.friendlyarm.Serial.view.RefreshableView
+        <com.friendlyarm.serial.seaweather4shd.view.RefreshableView
             android:id="@+id/db_rf2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
@@ -79,7 +79,7 @@
                 android:id="@+id/db_lv2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </com.friendlyarm.Serial.view.RefreshableView>
+        </com.friendlyarm.serial.seaweather4shd.view.RefreshableView>
 
     </RelativeLayout>
 
@@ -90,7 +90,7 @@
         android:layout_below="@id/db_top"
         android:visibility="invisible">
 
-        <com.friendlyarm.Serial.view.RefreshableView
+        <com.friendlyarm.serial.seaweather4shd.view.RefreshableView
             android:id="@+id/db_rf3"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </com.friendlyarm.Serial.view.RefreshableView>
+        </com.friendlyarm.serial.seaweather4shd.view.RefreshableView>
 
     </RelativeLayout>
 
