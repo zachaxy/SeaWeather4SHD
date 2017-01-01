@@ -534,7 +534,8 @@ public class ZoomImageView extends ImageView implements
 		 */
 
 		if (Param.bitmaps != null) {
-			for (int i = 1; i <= 19; i++) {
+			//fixed: 之前这里是硬编码,写的是 i<=19;之前确实有19个海区,现在是18个海区,所以别硬编码了;
+			for (int i = 1; i < Param.seaAreas.length; i++) {
 				canvas.drawBitmap(Param.seaAreasWeatherType[i], rect.centerX()
 						+ Param.seaAreas[i].x * currentScale, rect.centerY()
 						+ +Param.seaAreas[i].y * currentScale, paint);
@@ -622,10 +623,11 @@ public class ZoomImageView extends ImageView implements
 	}
 
 	// 在解析台风轨迹的时候使用该函数
+	// TODO: 2016/11/24 修改坐标
 	public static Locater transferLocate(Locater l) {
 		Locater l2 = new Locater();
-		l2.x = (int) (l.x / 2725.0 * 444.0 - 222.0);
-		l2.y = (int) (l.y / 2725.0 * 444.0 - 222.0);
+		l2.x = (int) (l.x / 1579.0 * 444.0 - 222.0);
+		l2.y = (int) (l.y / 1579.0 * 444.0 - 222.0);
 		return l2;
 	}
 

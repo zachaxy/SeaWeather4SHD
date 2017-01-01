@@ -80,11 +80,10 @@ public class Param {
 
     // 不用map存储天气类型了
     /*
-	 * public static final Map<Integer, Integer> weatherTypeMap = new
+     * public static final Map<Integer, Integer> weatherTypeMap = new
 	 * HashMap<Integer, Integer>(){ { put(1, R.drawable.d00); put(2,
 	 * R.drawable.d01); } };
 	 */
-
     public static boolean IsTyphonClear = false;
 
     // 用数组来存储天气类型,第一个索引手动赋值为0,类型从1开始的,我也是醉了...
@@ -129,25 +128,24 @@ public class Param {
             new Locater(129, 184), new Locater(181, 137)};*/
     public static final Locater[] seaAreas = {
             new Locater(0, 0),
-            new Locater(-275,-296),
-            new Locater(-64,-309),
-            new Locater(164,-310),
-            new Locater(279,-86),
-            new Locater(22,-212),
-            new Locater(-223,-148),
-            new Locater(-333,-143),
-            new Locater(-321,74),
-            new Locater(-65,-78),
-            new Locater(139,-26),
-            new Locater(221,84),
-            new Locater(24,63),
-            new Locater(-127,106),
-            new Locater(-224,179),
-            new Locater(-267,312),
-            new Locater(12,289),
-            new Locater(93,164),
-            new Locater(214,304),
-            new Locater(299,227)
+            new Locater(33,-334),
+            new Locater(56,-309),
+            new Locater(96,-326),
+            new Locater(100,-278),
+            new Locater(103,-233),
+            new Locater(159,-187),
+            new Locater(103,-111),
+            new Locater(1,-41),
+            new Locater(86,-36),
+            new Locater(55,28),
+            new Locater(-224,33),
+            new Locater(-155,22),
+            new Locater(-105,15),
+            new Locater(-38,13),
+            new Locater(-136,95),
+            new Locater(-20,92),
+            new Locater(-128,183),
+            new Locater(-31,183)
     };
 
     public static Bitmap[] seaAreasWeatherType = new Bitmap[20];

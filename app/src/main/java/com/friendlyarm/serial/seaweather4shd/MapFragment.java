@@ -58,6 +58,7 @@ import com.friendlyarm.serial.seaweather4shd.view.ZoomImageView;
 import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.data;
 import static android.R.attr.elegantTextHeight;
+import static android.content.ContentValues.TAG;
 import static com.friendlyarm.serial.seaweather4shd.R.drawable.show;
 import static com.friendlyarm.serial.seaweather4shd.tools.Param.serialPort;
 
@@ -248,7 +249,7 @@ public class MapFragment extends Fragment {
                                             public void run() {
                                                 if (count > 0) {
                                                     if (Param.SoundAck == 1) {
-                                                        Log.e("###setting","静噪设置响应ack,t2将被取消");
+                                                        Log.e("###setting", "静噪设置响应ack,t2将被取消");
                                                         h1.sendEmptyMessage(20);
                                                         t2.cancel();
                                                         count = -1;
@@ -760,11 +761,11 @@ public class MapFragment extends Fragment {
                         if (end8383Index % 2 != 0) {
                             break;
                         }
-                       // if (end8383Index % 2 == 0) {
-                            String paramStr = sb.substring(begin8383Index + 8, end8383Index);
-                            // TODO: 2016/9/25 0025 将来考虑把解析的函数放在另一个线程中,该线程中使用一个阻塞队列<String>;
-                            queue.add(paramStr);
-                            sb.delete(begin8383Index, end8383Index + 2);
+                        // if (end8383Index % 2 == 0) {
+                        String paramStr = sb.substring(begin8383Index + 8, end8383Index);
+                        // TODO: 2016/9/25 0025 将来考虑把解析的函数放在另一个线程中,该线程中使用一个阻塞队列<String>;
+                        queue.add(paramStr);
+                        sb.delete(begin8383Index, end8383Index + 2);
                         //}
                     }
 
@@ -870,14 +871,13 @@ public class MapFragment extends Fragment {
                                     }
 
                                     // -17,把tmp2的crc也删去了,但是把校验和放在了ocrc中
-                                    byte[] tmp2 = new byte[infoi.length - 17];
-                                    try {
-                                        System.arraycopy(infoi, 14, tmp2, 0,
-                                                infoi.length - 17);
-                                    } catch (Exception e) {
-                                        Log.e("###", "4丢包了...");
+                                    if (infoi.length - 17 <= 0) {
+                                        Log.e("###", "run:  infoi.length - 17<=0,丢包了");
                                         break;
                                     }
+                                    byte[] tmp2 = new byte[infoi.length - 17];
+                                    System.arraycopy(infoi, 14, tmp2, 0,infoi.length - 17);
+
 
                                     byte[] oCrc = null;
                                     if (infoi.length >= 3) {
@@ -1196,7 +1196,7 @@ public class MapFragment extends Fragment {
                 }
 
 			/*
-			 * if ((userID != 0) && (Param.mUsrID != userID)) { Log.d("###",
+             * if ((userID != 0) && (Param.mUsrID != userID)) { Log.d("###",
 			 * "不是群发,不是本机ID,舍弃"); break; }
 			 * 
 			 * if ((Param.mUsrID == userID) && (Long.valueOf(time) >
@@ -1479,7 +1479,7 @@ public class MapFragment extends Fragment {
         }, 0, 1000);
     }
 
-    class SearchThread extends Thread {
+    /*class SearchThread extends Thread {
         private Object mPauseLock;
         private boolean mPauseFlag;
 
@@ -1582,7 +1582,7 @@ public class MapFragment extends Fragment {
             }// while(true)
         }
 
-    }
+    }*/
 
     class DislinkThread extends Thread {
         private Object mPauseLock;

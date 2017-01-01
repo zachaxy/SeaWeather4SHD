@@ -35,8 +35,8 @@ public class Tools {
      */
     public static Locater transferLocate(Locater l) {
         Locater l2 = new Locater();
-        l2.x = (int) (l.x * 727 / 2725.0 - 363.0);
-        l2.y = (int) (l.y * 727 / 2725.0 - 363.0);
+        l2.x = (int) (l.x * 727 / 4677.0 - 363.0);
+        l2.y = (int) (l.y * 727 / 4677.0 - 363.0);
         return l2;
     }
 
