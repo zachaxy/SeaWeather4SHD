@@ -83,6 +83,8 @@ public class ZoomImageView extends ImageView implements
     //弹出popupwindow的view
     View detailContent;
 
+    private final Bitmap currentIndicator;
+
     public ZoomImageView(Context context) {
         this(context, null);
     }
@@ -183,7 +185,8 @@ public class ZoomImageView extends ImageView implements
                     }
                 });
 
-
+        currentIndicator = BitmapFactory.decodeResource(
+                context.getResources(),R.drawable.location);
     }
 
     private class AutoScaleRunnable implements Runnable {
@@ -588,7 +591,7 @@ public class ZoomImageView extends ImageView implements
 		 */
 
         //这里是画gps当前位置;
-        canvas.drawBitmap(Param.currentLocatin,
+        canvas.drawBitmap(currentIndicator,
                 rect.centerX() + currentLocation.x * currentScale,
                 rect.centerY() + currentLocation.y * currentScale,
                 paint);
@@ -808,8 +811,6 @@ public class ZoomImageView extends ImageView implements
                 context.getResources(), Param.weatherTypeMap[46]);
         Param.bitmaps[47] = BitmapFactory.decodeResource(
                 context.getResources(), Param.weatherTypeMap[47]);
-        Param.currentLocatin = BitmapFactory.decodeResource(
-                context.getResources(), R.drawable.location);
 
     }
 

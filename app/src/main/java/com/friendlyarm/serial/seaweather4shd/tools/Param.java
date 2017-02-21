@@ -194,7 +194,7 @@ public class Param {
     //移动端图片的大小;
     public final static double ACTUAL_IMAGE_SIZE = 800.0;
 
-    public static Bitmap currentLocatin;
+
     //这里规划的是整个海区的区域;同上面的seaAraes显示的天气图标位置不同;
     public static final SeaArea[] seaAreas2 = {
             new SeaArea(),
