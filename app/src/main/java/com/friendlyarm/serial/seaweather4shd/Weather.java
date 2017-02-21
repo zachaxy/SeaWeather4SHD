@@ -45,6 +45,7 @@ public class Weather {
 			// this.area.add(area.charAt(area.length()-1-i));
 			if (area.charAt(area.length() - 1 - i) == '1') {
 				Param.seaAreasWeatherType[i+1] = Param.bitmaps[weatherType];
+				Param.weaherDetail[i+1] = buildText();
 			}
 		}
 		this.bitmap = BitmapFactory.decodeResource(
@@ -114,7 +115,7 @@ public class Weather {
 
      private void initParamBitmaps(){
     	 
-	 Param.bitmaps  = new Bitmap[39];
+	 	Param.bitmaps  = new Bitmap[39];
 		Param.bitmaps[0] = BitmapFactory.decodeResource(
 				ZoomImageView.zoomContext.getResources(),
 				Param.weatherTypeMap[0]);
@@ -232,8 +233,11 @@ public class Weather {
 		Param.bitmaps[38] = BitmapFactory.decodeResource(
 				 ZoomImageView.zoomContext.getResources(),
 				Param.weatherTypeMap[38]);
-		
-		
+
+         // TODO: 2017/2/20 顺道在这帮我们把位置也加载了吧...实在找不到初始化的地方;
+         Param.currentLocatin = BitmapFactory.decodeResource(
+                 ZoomImageView.zoomContext.getResources(),R.drawable.location);
+		//这里全部初始化成了晴天;
 		for (int i = 0; i < Param.seaAreasWeatherType.length; i++) {
    		 Param.seaAreasWeatherType[i] = Param.bitmaps[0];
 		}

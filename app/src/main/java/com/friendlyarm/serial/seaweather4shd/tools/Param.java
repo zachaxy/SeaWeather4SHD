@@ -15,6 +15,7 @@ import com.felhr.usbserial.UsbSerialDevice;
 import com.friendlyarm.serial.seaweather4shd.Locater;
 import com.friendlyarm.serial.seaweather4shd.Msg;
 import com.friendlyarm.serial.seaweather4shd.R;
+import com.friendlyarm.serial.seaweather4shd.bean.SeaArea;
 import com.friendlyarm.serial.seaweather4shd.dao.MyDatabaseHelper;
 
 /*import com.friendlyarm.Serial.Locater;
@@ -126,26 +127,27 @@ public class Param {
             new Locater(13, 37), new Locater(-79, 63), new Locater(-138, 108),
             new Locater(-164, 189), new Locater(6, 175), new Locater(55, 99),
             new Locater(129, 184), new Locater(181, 137)};*/
+    //这里表示的是天气图标的显示位置;
     public static final Locater[] seaAreas = {
             new Locater(0, 0),
-            new Locater(33,-334),
-            new Locater(56,-309),
-            new Locater(96,-326),
-            new Locater(100,-278),
-            new Locater(103,-233),
-            new Locater(159,-187),
-            new Locater(103,-111),
-            new Locater(1,-41),
-            new Locater(86,-36),
-            new Locater(55,28),
-            new Locater(-224,33),
-            new Locater(-155,22),
-            new Locater(-105,15),
-            new Locater(-38,13),
-            new Locater(-136,95),
-            new Locater(-20,92),
-            new Locater(-128,183),
-            new Locater(-31,183)
+            new Locater(36,-368),
+            new Locater(61,-341),
+            new Locater(106,-359),
+            new Locater(110,-306),
+            new Locater(113,-257),
+            new Locater(175,-206),
+            new Locater(113,-122),
+            new Locater(1,-46),
+            new Locater(94,-40),
+            new Locater(60,30),
+            new Locater(-247,36),
+            new Locater(-171,24),
+            new Locater(-116,16),
+            new Locater(-42,15),
+            new Locater(-150,105),
+            new Locater(-23,101),
+            new Locater(-141,201),
+            new Locater(-34,201)
     };
 
     public static Bitmap[] seaAreasWeatherType = new Bitmap[20];
@@ -186,4 +188,63 @@ public class Param {
 
     public static boolean totalFlag = true;
 
+    //PC端图片的大小;
+    public final static double ORIGINAL_IMAGE_SIZE = 4677.0;
+
+    //移动端图片的大小;
+    public final static double ACTUAL_IMAGE_SIZE = 800.0;
+
+    public static Bitmap currentLocatin;
+    //这里规划的是整个海区的区域;同上面的seaAraes显示的天气图标位置不同;
+    public static final SeaArea[] seaAreas2 = {
+            new SeaArea(),
+            new SeaArea(new Locater(458,2),new Locater(473,14),new Locater(438,82),new Locater(399,39),2710.0),
+            new SeaArea(new Locater(459,44),new Locater(447,66),new Locater(490,73),new Locater(474,38),825.5),
+            new SeaArea(new Locater(474,38),new Locater(490,73),new Locater(558,67),new Locater(533,8),3353.5),
+            new SeaArea(new Locater(490,73),new Locater(401,122),new Locater(579,122),new Locater(574,66),6730.5),
+            new SeaArea(new Locater(418,122),new Locater(478,186),new Locater(563,158),new Locater(579,122),6458.0),
+            new SeaArea(new Locater(563,158),new Locater(323,240),new Locater(615,240),new Locater(672,153),16571.0),
+            new SeaArea(new Locater(478,240),new Locater(411,321),new Locater(550,326),new Locater(615,240),11688.0),
+            new SeaArea(new Locater(411,321),new Locater(358,369),new Locater(412,407),new Locater(456,328),4234.5),
+            new SeaArea(new Locater(456,328),new Locater(451,407),new Locater(518,407),new Locater(550,326),6421.5),
+            new SeaArea(new Locater(411,407),new Locater(411,462),new Locater(518,462),new Locater(518,407),5885.0),
+            new SeaArea(new Locater(139,374),new Locater(141,504),new Locater(203,459),new Locater(225,400),6898.0),
+            new SeaArea(new Locater(224,412),new Locater(213,434),new Locater(249,430),new Locater(238,406),575.0),
+            new SeaArea(new Locater(238,406),new Locater(249,430),new Locater(230,462),new Locater(314,462),new Locater(314,381),5834.0),
+            new SeaArea(new Locater(314,336),new Locater(314,462),new Locater(412,462),new Locater(412,407),8869.0),
+            new SeaArea(new Locater(203,459),new Locater(78,557),new Locater(314,557),new Locater(314,462),16836.5),
+            new SeaArea(new Locater(314,462),new Locater(314,557),new Locater(557,442),new Locater(447,462),12872.5),
+            new SeaArea(new Locater(213,557),new Locater(73,753),new Locater(314,753),new Locater(314,557),33516.0),
+            new SeaArea(new Locater(314,557),new Locater(314,753),new Locater(520,753),new Locater(442,557),32732.0),
+    };
+
+
+
+
+
+
+
+
+    //十八个海区,再加上一个0的天气信息;
+    public static String[] weaherDetail = {
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+            "天气:晴",
+    };
 }

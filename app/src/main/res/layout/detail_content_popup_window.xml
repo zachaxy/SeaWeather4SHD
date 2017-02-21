@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:background="@drawable/popup_bg">
+
+    <TextView
+        android:id="@+id/detail_popup_tv_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        tools:text="南海区域"
+        android:textSize="35sp" />
+
+    <ImageView
+        android:id="@+id/detail_popup_img_divider1"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@id/detail_popup_tv_area"
+        android:src="@drawable/divider_line" />
+
+    <TextView
+        android:id="@+id/detail_popup_tv_24"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_popup_img_divider1"
+        android:gravity="center"
+        android:text="天气预报"
+        android:textSize="35sp" />
+
+    <TextView
+        android:id="@+id/detail_popup_tv_content_24"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_popup_tv_24"
+        android:gravity="center"
+        tools:text="当前气温：31℃ 湿度：64% 风力：东北风2级 气压：956 hPa 日出：06:05 日落：19:31 紫外线强度：很强"
+        android:textSize="40sp" />
+
+   <!-- <ImageView
+        android:id="@+id/detail_popup_img_divider2"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@id/detail_popup_tv_content_24"
+        android:src="@drawable/divider_line" />
+
+    <TextView
+        android:id="@+id/detail_popup_tv_48"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_popup_img_divider2"
+        android:gravity="center"
+        android:text="48小时天气预报"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/detail_popup_tv_content_48"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_popup_tv_48"
+        android:gravity="center"
+        android:text="当前气温：31℃ 湿度：64% 风力：东北风2级 气压：956 hPa 日出：06:05 日落：19:31 紫外线强度：很强"
+        android:textSize="15sp" />-->
+</RelativeLayout>

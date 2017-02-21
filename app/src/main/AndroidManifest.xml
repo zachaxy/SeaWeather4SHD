@@ -2,16 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.friendlyarm.serial.seaweather4shd">
 
+    <!--接受开机时的广播-->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <!--禁用 home 键,不知道起不起作用-->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/><!--仅限于在debug中使用啊-->
+
+<!--读取任务栈,用来做crash自动恢复-->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:name=".MyApp"
         android:theme="@style/AppTheme">
         <activity
             android:name=".FirstActivity"

@@ -7,8 +7,8 @@
 
     <com.friendlyarm.serial.seaweather4shd.view.ZoomImageView
         android:id="@+id/zoomImg"
-        android:layout_width="727dp"
-        android:layout_height="727dp"
+        android:layout_width="800px"
+        android:layout_height="800px"
         android:scaleType="matrix" />
 
     <ImageView

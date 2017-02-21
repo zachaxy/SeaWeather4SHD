@@ -1,6 +1,12 @@
 package com.friendlyarm.serial.seaweather4shd;
 
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Process;
 
 import java.io.UnsupportedEncodingException;
@@ -31,6 +37,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +93,7 @@ public class MapFragment extends Fragment {
     private Thread listen1;
     private Thread listen2;
     private Thread listen3;
-    private Thread listen4;
+    private Thread listen4; //用来定时发送位置信息;
 
     private SharedPreferences mDBPref;
     private int dbCout1;
@@ -136,6 +143,14 @@ public class MapFragment extends Fragment {
     public ReadThread mReadThread = new ReadThread();
     private BlockingQueue<String> queue = new LinkedBlockingQueue<>(20);
     public ParseParamThread mParseParamThread = new ParseParamThread(queue);
+
+    //GPS部分;
+    private static final int LOCATION = 40; //表示GPS坐标位置的改变;
+    private Locater mLocater = new Locater(0, 0); //用来存储当前位置;采用近似吧
+    private LocationListener mLocationListener;
+    private LocationManager locManager;
+    private double j; //经度;
+    private double w;  //维度;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -494,6 +509,75 @@ public class MapFragment extends Fragment {
         return mapLayout;
     }
 
+
+    void initGPS() {
+
+        locManager = (LocationManager) (getActivity().getSystemService(Context.LOCATION_SERVICE));
+        mLocationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                // 当GPS定位信息发生改变时，更新位置
+                j = location.getLongitude();  //经度
+                w = location.getLatitude();   //维度;
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Toast.makeText(getActivity(),"关闭了gps",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                System.out.println("onStatusChanged: " + provider);
+            }
+        };
+        //TODO:没有办法,使用22的版本编译不成;不知道能不能跑起来;
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
+
+        //这里使用20分钟发一次,而且是在位置改变的时候发一次;如果20分钟后位置没有改变,也不发
+        listen4 = new Thread() {
+            @Override
+            public void run() {
+                while (Param.totalFlag) {
+                    int ji = Math.round((float) j);
+                    int wi = Math.round((float) w);
+                    if (ji == mLocater.x && wi == mLocater.y) {
+
+                    } else {
+                        Message msg = h1.obtainMessage();
+                        msg.what = LOCATION;
+                        //首先改变mLocater;
+                        mLocater.x = ji;
+                        mLocater.y = wi;
+                        //再用hanlder发出去;
+                        msg.arg1 = ji;
+                        msg.arg2 = wi;
+                        h1.sendMessage(msg);
+                    }
+                    try {
+                        Thread.sleep(1000 * 60 * 20);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+    }
+
     /**
      * 弃用的函数;
      * 重新设置一个回调解析函数,该函数,以及其调用的所有函数都在子线程中!!!
@@ -622,6 +706,13 @@ public class MapFragment extends Fragment {
                     cRate.setText("");
                     cBi.setText("");
                     cNo.setText("扫描中");
+                    break;
+                case LOCATION:
+                    //有新的物理位置了;这里拿到的还是实际的位置
+                    // 接下来转换成相对中心点的坐标;-3是相对左挪动距离,-6是向上挪动距离;
+                    zoomImageView.currentLocation.x = Tools.transferLocate(msg.arg1)-3;
+                    zoomImageView.currentLocation.y = Tools.transferLocate(msg.arg2)-6;
+                    zoomImageView.invalidate();
                     break;
                 default:
                     break;
@@ -876,7 +967,7 @@ public class MapFragment extends Fragment {
                                         break;
                                     }
                                     byte[] tmp2 = new byte[infoi.length - 17];
-                                    System.arraycopy(infoi, 14, tmp2, 0,infoi.length - 17);
+                                    System.arraycopy(infoi, 14, tmp2, 0, infoi.length - 17);
 
 
                                     byte[] oCrc = null;
@@ -1268,8 +1359,8 @@ public class MapFragment extends Fragment {
                 Param.db.insert("typhoon", null, value5);
 
                 // TODO:台风信息如何往天气消息里面添加
-			/*
-			 * ContentValues value6 = new ContentValues(); value6.put("time",
+            /*
+             * ContentValues value6 = new ContentValues(); value6.put("time",
 			 * time); value6.put("content", weather.text);
 			 * Param.db.insert("weather", null, value6);
 			 */
@@ -1287,8 +1378,8 @@ public class MapFragment extends Fragment {
         int hour = b[3];
         int minus = b[4];
         int second = b[5];
-		/*
-		 * String s = year + "-" + month + "-" + day + " " + hour + ":" + minus
+        /*
+         * String s = year + "-" + month + "-" + day + " " + hour + ":" + minus
 		 * + ":" + second;
 		 */
         // String s = ""+year + month + day + hour + minus + second;
