@@ -398,6 +398,8 @@ public class MapFragment extends Fragment {
             }
         });
 
+        initGPS();
+
         mParseParamThread.start();
         //死循环等待解析参数的线程启动起来;
         while (!mParseParamThread.isAlive()) ;
@@ -556,7 +558,7 @@ public class MapFragment extends Fragment {
                     int ji = Math.round((float) j);
                     int wi = Math.round((float) w);
                     if (ji == mLocater.x && wi == mLocater.y) {
-
+                        //如果20分钟后,还是上次的位置,那么也不需要处理;现在发的还是原始经纬度;
                     } else {
                         Message msg = h1.obtainMessage();
                         msg.what = LOCATION;
