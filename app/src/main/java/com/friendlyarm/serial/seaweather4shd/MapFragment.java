@@ -554,6 +554,11 @@ public class MapFragment extends Fragment {
         listen4 = new Thread() {
             @Override
             public void run() {
+                try {  //先暂停10s,目的是希望有x,y的初始值,
+                    Thread.sleep(1000 * 10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 while (Param.totalFlag) {
                     int ji = Math.round((float) j);
                     int wi = Math.round((float) w);
@@ -578,6 +583,7 @@ public class MapFragment extends Fragment {
                 }
             }
         };
+        listen4.start();
     }
 
     /**
