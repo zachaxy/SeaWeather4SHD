@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/><!--仅限于在debug中使用啊-->
 
-<!--读取任务栈,用来做crash自动恢复-->
+    <!--读取任务栈,用来做crash自动恢复-->
     <uses-permission android:name="android.permission.GET_TASKS"/>
 
 

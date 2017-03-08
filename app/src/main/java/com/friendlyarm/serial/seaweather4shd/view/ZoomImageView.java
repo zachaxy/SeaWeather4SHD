@@ -555,7 +555,6 @@ public class ZoomImageView extends ImageView implements
     // private Path path;
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d("#######", "onDraw");
         super.onDraw(canvas);
 
         // path.reset();

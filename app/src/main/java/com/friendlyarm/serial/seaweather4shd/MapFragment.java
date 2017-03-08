@@ -146,11 +146,11 @@ public class MapFragment extends Fragment {
 
     //GPS部分;
     private static final int LOCATION = 40; //表示GPS坐标位置的改变;
-    private Locater mLocater = new Locater(0, 0); //用来存储当前位置;采用近似吧
+    //private Locater mLocater = new Locater(0, 0); //用来存储当前位置;采用近似吧
     private LocationListener mLocationListener;
     private LocationManager locManager;
-    private double j; //经度;
-    private double w;  //维度;
+    private volatile double j; //经度;
+    private volatile double w;  //维度;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -525,7 +525,7 @@ public class MapFragment extends Fragment {
 
             @Override
             public void onProviderDisabled(String provider) {
-                Toast.makeText(getActivity(),"关闭了gps",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "关闭了gps", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -540,12 +540,6 @@ public class MapFragment extends Fragment {
         //TODO:没有办法,使用22的版本编译不成;不知道能不能跑起来;
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
@@ -560,30 +554,37 @@ public class MapFragment extends Fragment {
                     e.printStackTrace();
                 }
                 while (Param.totalFlag) {
-                    int ji = Math.round((float) j);
-                    int wi = Math.round((float) w);
-                    if (ji == mLocater.x && wi == mLocater.y) {
+
+                    //NOTE:这里改为j+0.5之后再取整;
+                    int ji = (int) (j+0.5);
+                    int wi = (int) (w+0.5);
+//                    if (ji == mLocater.x && wi == mLocater.y) {
                         //如果20分钟后,还是上次的位置,那么也不需要处理;现在发的还是原始经纬度;
-                    } else {
                         Message msg = h1.obtainMessage();
                         msg.what = LOCATION;
                         //首先改变mLocater;
-                        mLocater.x = ji;
-                        mLocater.y = wi;
+                        /*mLocater.x = ji;
+                        mLocater.y = wi;*/
                         //再用hanlder发出去;
                         msg.arg1 = ji;
                         msg.arg2 = wi;
                         h1.sendMessage(msg);
-                    }
                     try {
-                        Thread.sleep(1000 * 60 * 20);
+                        Thread.sleep(1000 * 60); //之前是20分钟,现在改为1分钟;
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
+                        return;
                     }
                 }
             }
         };
         listen4.start();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        listen4.interrupt();
     }
 
     /**
@@ -718,6 +719,7 @@ public class MapFragment extends Fragment {
                 case LOCATION:
                     //有新的物理位置了;这里拿到的还是实际的位置
                     // 接下来转换成相对中心点的坐标;-3是相对左挪动距离,-6是向上挪动距离;
+                    Toast.makeText(getActivity(),""+msg.arg1+"<--->"+msg.arg2,Toast.LENGTH_LONG).show();
                     zoomImageView.currentLocation.x = Tools.transferLocate(msg.arg1)-3;
                     zoomImageView.currentLocation.y = Tools.transferLocate(msg.arg2)-6;
                     zoomImageView.invalidate();
