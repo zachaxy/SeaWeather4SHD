@@ -556,19 +556,19 @@ public class MapFragment extends Fragment {
                 while (Param.totalFlag) {
 
                     //NOTE:这里改为j+0.5之后再取整;
-                    int ji = (int) (j+0.5);
-                    int wi = (int) (w+0.5);
+                    int ji = (int) (j + 0.5);
+                    int wi = (int) (w + 0.5);
 //                    if (ji == mLocater.x && wi == mLocater.y) {
-                        //如果20分钟后,还是上次的位置,那么也不需要处理;现在发的还是原始经纬度;
-                        Message msg = h1.obtainMessage();
-                        msg.what = LOCATION;
-                        //首先改变mLocater;
+                    //如果20分钟后,还是上次的位置,那么也不需要处理;现在发的还是原始经纬度;
+                    Message msg = h1.obtainMessage();
+                    msg.what = LOCATION;
+                    //首先改变mLocater;
                         /*mLocater.x = ji;
                         mLocater.y = wi;*/
-                        //再用hanlder发出去;
-                        msg.arg1 = ji;
-                        msg.arg2 = wi;
-                        h1.sendMessage(msg);
+                    //再用hanlder发出去;
+                    msg.arg1 = ji;
+                    msg.arg2 = wi;
+                    h1.sendMessage(msg);
                     try {
                         Thread.sleep(1000 * 60); //之前是20分钟,现在改为1分钟;
                     } catch (InterruptedException e) {
@@ -585,6 +585,19 @@ public class MapFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         listen4.interrupt();
+        if (locManager != null) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            locManager.removeUpdates(mLocationListener);
+        }
     }
 
     /**
