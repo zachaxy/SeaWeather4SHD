@@ -65,6 +65,7 @@ import com.friendlyarm.serial.seaweather4shd.view.ZoomImageView;
 import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.data;
 import static android.R.attr.elegantTextHeight;
+import static android.R.attr.y;
 import static android.content.ContentValues.TAG;
 import static com.friendlyarm.serial.seaweather4shd.R.drawable.show;
 import static com.friendlyarm.serial.seaweather4shd.tools.Param.serialPort;
@@ -146,7 +147,8 @@ public class MapFragment extends Fragment {
 
     //GPS部分;
     private static final int LOCATION = 40; //表示GPS坐标位置的改变;
-    //private Locater mLocater = new Locater(0, 0); //用来存储当前位置;采用近似吧
+    private Locater mLocater = new Locater(0, 0); //用来存储当前位置;采用近似吧
+    private Locator2 mLocator2 = new Locator2(0,0);
     private LocationListener mLocationListener;
     private LocationManager locManager;
     private volatile double j; //经度;
@@ -561,7 +563,9 @@ public class MapFragment extends Fragment {
 //                    if (ji == mLocater.x && wi == mLocater.y) {
                     //如果20分钟后,还是上次的位置,那么也不需要处理;现在发的还是原始经纬度;
                     Message msg = h1.obtainMessage();
+                    mLocator2 = new Locator2(j,w);
                     msg.what = LOCATION;
+                    msg.obj = mLocator2;
                     //首先改变mLocater;
                         /*mLocater.x = ji;
                         mLocater.y = wi;*/
@@ -733,8 +737,11 @@ public class MapFragment extends Fragment {
                     //有新的物理位置了;这里拿到的还是实际的位置
                     // 接下来转换成相对中心点的坐标;-3是相对左挪动距离,-6是向上挪动距离;
                     Toast.makeText(getActivity(),""+msg.arg1+"<--->"+msg.arg2,Toast.LENGTH_LONG).show();
-                    zoomImageView.currentLocation.x = Tools.transferLocate(msg.arg1)-3;
-                    zoomImageView.currentLocation.y = Tools.transferLocate(msg.arg2)-6;
+                    // TODO: 2017/3/8 严重的逻辑错误,这个发过来的是实际的坐标,而下面调用的是转换安台标点到平板的相对坐标
+                    //应该调用:
+//                    zoomImageView.currentLocation.x = Tools.transferLocate(msg.arg1)-3;
+//                    zoomImageView.currentLocation.y = Tools.transferLocate(msg.arg2)-6;
+                    zoomImageView.currentLocation = Tools.getLoationInView((Locator2) msg.obj);
                     zoomImageView.invalidate();
                     break;
                 default:

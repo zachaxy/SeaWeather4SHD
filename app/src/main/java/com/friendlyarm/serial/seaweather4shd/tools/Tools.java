@@ -1,18 +1,18 @@
 package com.friendlyarm.serial.seaweather4shd.tools;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.Log;
 
 import com.friendlyarm.serial.seaweather4shd.Locater;
+import com.friendlyarm.serial.seaweather4shd.Locator2;
 import com.friendlyarm.serial.seaweather4shd.bean.SeaArea;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /***
  * 辅助工具类
@@ -45,6 +45,20 @@ public class Tools {
         l2.y = (int) (l.y * Param.ACTUAL_IMAGE_SIZE / Param.ORIGINAL_IMAGE_SIZE - Param.ACTUAL_IMAGE_SIZE / 2);
         return l2;
     }
+
+
+    /***
+     * 目前采用的是这个版本
+     * @param locator2 获取到的gps经纬度封装;
+     * @return  相对坐标;
+     */
+    public static Locator2 getLoationInView(Locator2 locator2) {
+        double xi = (locator2.x - ORIGINAL_X) * Param.ACTUAL_IMAGE_SIZE/ ORIGINAL_INTERVAL-Param.ACTUAL_IMAGE_SIZE / 2;
+        double yi = (ORIGINAL_Y - locator2.y) * Param.ACTUAL_IMAGE_SIZE/ ORIGINAL_INTERVAL-Param.ACTUAL_IMAGE_SIZE / 2;
+
+        return new Locator2(xi, yi);
+    }
+
 
     /***
      * 针对单个点的坐标
@@ -121,9 +135,6 @@ public class Tools {
 
     public static final List<SeaArea> list = new ArrayList<>();
 
-    static {
-//        list.add();
-    }
 
     //这样gps位置也可以调用这个方法,实现在图片中的
     public static Locater getLoationInView(double x, double y) {
@@ -132,6 +143,18 @@ public class Tools {
 
         return new Locater(xi, yi);
     }
+
+
+
+    //GPS单个点
+    public static Locater getLoationInView(int x, int y) {
+        int xi = (int) Math.round((x - ORIGINAL_X) / ORIGINAL_INTERVAL);
+        int yi = (int) Math.round((ORIGINAL_Y - y) / ORIGINAL_INTERVAL);
+
+        return new Locater(xi, yi);
+    }
+
+
 
     public static boolean pInQuadrangle(Locater a, Locater b, Locater c, Locater d, Locater p) {
         double dTriangle = triangleArea(a, b, p) + triangleArea(b, c, p)

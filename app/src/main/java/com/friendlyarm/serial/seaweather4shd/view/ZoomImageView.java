@@ -32,6 +32,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.friendlyarm.serial.seaweather4shd.Locater;
+import com.friendlyarm.serial.seaweather4shd.Locator2;
 import com.friendlyarm.serial.seaweather4shd.R;
 import com.friendlyarm.serial.seaweather4shd.Typhoon;
 import com.friendlyarm.serial.seaweather4shd.Weather;
@@ -74,8 +75,8 @@ public class ZoomImageView extends ImageView implements
     public Weather weather;
     public Typhoon typhoon;
 
-    public Locater currentLocation = new Locater(0, 0);
-
+    //    public Locater currentLocation = new Locater(0, 0);
+    public Locator2 currentLocation = new Locator2(0, 0);
     public static Context zoomContext;
 
     //点击时弹出详细信息的窗口
@@ -591,8 +592,8 @@ public class ZoomImageView extends ImageView implements
 
         //这里是画gps当前位置;
         canvas.drawBitmap(currentIndicator,
-                rect.centerX() + currentLocation.x * currentScale,
-                rect.centerY() + currentLocation.y * currentScale,
+                rect.centerX() + (float) currentLocation.x * currentScale,
+                rect.centerY() + (float)currentLocation.y * currentScale,
                 paint);
 
         if (Param.bitmaps != null) {
