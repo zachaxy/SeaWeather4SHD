@@ -148,6 +148,25 @@ public class Param {
             new Locater(-23,101),
             new Locater(-141,201),
             new Locater(-34,201)
+     /*       new Locater(0, 0),
+            new Locater(39,-365),
+            new Locater(64,-338),
+            new Locater(109,-356),
+            new Locater(113,-303),
+            new Locater(116,-254),
+            new Locater(178,-203),
+            new Locater(116,-119),
+            new Locater(4,-43),
+            new Locater(97,-37),
+            new Locater(63,33),
+            new Locater(-244,39),
+            new Locater(-168,27),
+            new Locater(-113,19),
+            new Locater(-39,18),
+            new Locater(-147,108),
+            new Locater(-20,104),
+            new Locater(-138,204),
+            new Locater(-31,204)*/
     };
 
     public static Bitmap[] seaAreasWeatherType = new Bitmap[20];
@@ -195,6 +214,7 @@ public class Param {
     public final static double ACTUAL_IMAGE_SIZE = 800.0;
 
 
+
     //这里规划的是整个海区的区域;同上面的seaAraes显示的天气图标位置不同;
     public static final SeaArea[] seaAreas2 = {
             new SeaArea(),
@@ -225,6 +245,8 @@ public class Param {
 
 
 
+
+
     //十八个海区,再加上一个0的天气信息;
     public static String[] weaherDetail = {
             "天气:晴",
@@ -247,4 +269,35 @@ public class Param {
             "天气:晴",
             "天气:晴",
     };
+
+
+
+
+
+
+
+
+    public static String[] AREA_NAME = {
+           "中国",
+            "渤海",
+            "渤海海峡",
+            "黄海北部",
+            "黄海中部",
+            "黄海南部",
+            "东海北部",
+            "东海南部",
+            "台湾海峡",
+            "台湾省以东",
+            "巴士海峡",
+            "北部湾",
+            "琼州海峡",
+            "南海西北部",
+            "南海东北部",
+            "南海中西部",
+            "南海中东部",
+            "南海西南部",
+            "南海东南部",
+    };
+
+    public static int AREA_NO = 0;
 }

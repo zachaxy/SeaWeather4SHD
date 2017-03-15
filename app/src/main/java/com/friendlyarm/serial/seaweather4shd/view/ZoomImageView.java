@@ -136,7 +136,7 @@ public class ZoomImageView extends ImageView implements
                             isAutoScale = true;
                         } else {
                             /*
-							 * mScaleMatrix.postScale(mInitScale / getScale(),
+                             * mScaleMatrix.postScale(mInitScale / getScale(),
 							 * mInitScale / getScale(), x, y);
 							 * setImageMatrix(mScaleMatrix);
 							 */
@@ -153,14 +153,15 @@ public class ZoomImageView extends ImageView implements
                         boolean inFlag = false;
                         float downX = e.getX();
                         float downY = e.getY();
+                        //将按下的点坐标转换成int类型的,用来计算区域吧;
                         Locater lo = getOrignalLocation(downX, downY);
 
                         //遍历18个区域,看是落在哪个区域中;
                         for (int i = 0; i < Param.seaAreas2.length; i++) {
-                            if (Tools.pInQuadrangle(Param.seaAreas2[i],lo)){
+                            if (Tools.pInQuadrangle(Param.seaAreas2[i], lo)) {
                                 dismissPopupWindow(); //可能存在的情况是:我之前点击了1,正在显示,现在我又点击了2,那么我就让之前的消失掉;
                                 TextView area = (TextView) detailContent.findViewById(R.id.detail_popup_tv_area);
-                                area.setText("第"+i+"海区");
+                                area.setText(Param.AREA_NAME[i]);
                                 TextView detal = (TextView) detailContent.findViewById(R.id.detail_popup_tv_content_24);
                                 detal.setText(Param.weaherDetail[i]);
                                 popupWindow = new PopupWindow(detailContent, -2, -2);
@@ -179,7 +180,7 @@ public class ZoomImageView extends ImageView implements
                             }
                         }
 
-                        if (!inFlag){ //如果是其他区域,那么也将这个windown取消掉;
+                        if (!inFlag) { //如果是其他区域,那么也将这个windown取消掉;
                             dismissPopupWindow();
                         }
                         return super.onSingleTapConfirmed(e);
@@ -187,7 +188,7 @@ public class ZoomImageView extends ImageView implements
                 });
 
         currentIndicator = BitmapFactory.decodeResource(
-                context.getResources(),R.drawable.location);
+                context.getResources(), R.drawable.location);
     }
 
     private class AutoScaleRunnable implements Runnable {
@@ -578,7 +579,7 @@ public class ZoomImageView extends ImageView implements
         currentScale = (rect.right - rect.left) / getWidth();
 
 		/*
-		 * canvas.drawCircle(rect.centerX() + 100 * currentScale,
+         * canvas.drawCircle(rect.centerX() + 100 * currentScale,
 		 * rect.centerY(), 5, paint);
 		 */
 		/*
@@ -593,16 +594,22 @@ public class ZoomImageView extends ImageView implements
         //这里是画gps当前位置;
         canvas.drawBitmap(currentIndicator,
                 rect.centerX() + (float) currentLocation.x * currentScale,
-                rect.centerY() + (float)currentLocation.y * currentScale,
+                rect.centerY() + (float) currentLocation.y * currentScale,
                 paint);
 
-        if (Param.bitmaps != null) {
-            //fixed: 之前这里是硬编码,写的是 i<=19;之前确实有19个海区,现在是18个海区,所以别硬编码了;
-            for (int i = 1; i < Param.seaAreas.length; i++) {
-                canvas.drawBitmap(Param.seaAreasWeatherType[i], rect.centerX()
-                        + Param.seaAreas[i].x * currentScale, rect.centerY()
-                        + Param.seaAreas[i].y * currentScale, paint);
-            }
+        if (Param.bitmaps != null && Param.AREA_NO > 0) {
+            //fixed: 之前这里是硬编码,写的是 i<=19;现在是18个海区,所以别硬编码了;
+            //NOTE:之前是在位置整体-3之后再乘以缩放因子,现在是在乘缩放因子之后再-3,可以达到这种效果;
+           /* for (int i = 1; i < Param.seaAreas.length; i++) {
+                canvas.drawBitmap(Param.seaAreasWeatherType[i],
+                        rect.centerX() + Param.seaAreas[i].x * currentScale -3,
+                        rect.centerY() + Param.seaAreas[i].y * currentScale -3,
+                        paint);
+            }*/
+            canvas.drawBitmap(Param.seaAreasWeatherType[Param.AREA_NO],
+                    rect.centerX() + Param.seaAreas[Param.AREA_NO].x * currentScale - 3,
+                    rect.centerY() + Param.seaAreas[Param.AREA_NO].y * currentScale - 3,
+                    paint);
         }
         // 表明此时有台风
         if (!Param.IsTyphonClear) {

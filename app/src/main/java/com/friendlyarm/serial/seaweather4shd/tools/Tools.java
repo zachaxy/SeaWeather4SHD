@@ -49,12 +49,13 @@ public class Tools {
 
     /***
      * 目前采用的是这个版本
+     *
      * @param locator2 获取到的gps经纬度封装;
-     * @return  相对坐标;
+     * @return 相对坐标;
      */
     public static Locator2 getLoationInView(Locator2 locator2) {
-        double xi = (locator2.x - ORIGINAL_X) * Param.ACTUAL_IMAGE_SIZE/ ORIGINAL_INTERVAL-Param.ACTUAL_IMAGE_SIZE / 2;
-        double yi = (ORIGINAL_Y - locator2.y) * Param.ACTUAL_IMAGE_SIZE/ ORIGINAL_INTERVAL-Param.ACTUAL_IMAGE_SIZE / 2;
+        double xi = (locator2.x - ORIGINAL_X) * Param.ACTUAL_IMAGE_SIZE / ORIGINAL_INTERVAL - Param.ACTUAL_IMAGE_SIZE / 2;
+        double yi = (ORIGINAL_Y - locator2.y) * Param.ACTUAL_IMAGE_SIZE / ORIGINAL_INTERVAL - Param.ACTUAL_IMAGE_SIZE / 2;
 
         return new Locator2(xi, yi);
     }
@@ -145,7 +146,6 @@ public class Tools {
     }
 
 
-
     //GPS单个点
     public static Locater getLoationInView(int x, int y) {
         int xi = (int) Math.round((x - ORIGINAL_X) / ORIGINAL_INTERVAL);
@@ -153,7 +153,6 @@ public class Tools {
 
         return new Locater(xi, yi);
     }
-
 
 
     public static boolean pInQuadrangle(Locater a, Locater b, Locater c, Locater d, Locater p) {
@@ -206,5 +205,15 @@ public class Tools {
         return triangleArea(a, b, c) + triangleArea(a, c, d) + triangleArea(a, d, e);
     }
 
+
+    public static int whichArea(Locator2 locator2) {
+        Locater lo = new Locater((int) (locator2.x + 0.5), (int) (locator2.y + 0.5));
+        for (int i = 0; i < Param.seaAreas2.length; i++) {
+            if (Tools.pInQuadrangle(Param.seaAreas2[i], lo)) {
+                return i;
+            }
+        }
+        return 0;
+    }
 
 }

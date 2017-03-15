@@ -45,7 +45,7 @@ public class Weather {
 			// this.area.add(area.charAt(area.length()-1-i));
 			if (area.charAt(area.length() - 1 - i) == '1') {
 				Param.seaAreasWeatherType[i+1] = Param.bitmaps[weatherType];
-				Param.weaherDetail[i+1] = buildText();
+				Param.weaherDetail[i+1] = buildTextForDetailWithWrap();
 			}
 		}
 		this.bitmap = BitmapFactory.decodeResource(
@@ -74,10 +74,37 @@ public class Weather {
 		}else if(windDire1 != windDire2){
 			wd = ", "+getWindDir(windDire1) + "风转"+ getWindDir(windDire2) + "风";
 		}
-		
-		
+
 		return "(天气:"+Param.weatherName[weatherType]+wp+wd+")"+text;
 	}
+
+
+	public String buildTextForDetailWithWrap() {
+		String wp = "";
+		String wd = "";
+
+		if((windPower1==0)&&(windPower2==0)){
+			wp = "";
+		}else if(windPower2==windPower1){
+			wp = ", 风力" + windPower1+"级";
+		}else if(windPower2!=windPower1){
+			wp = ", 风力" + windPower1+"到"+windPower2+"级";
+		}
+
+
+
+		if((windDire1==0)&&(windDire2==0)){
+			wd = "";
+		}else if(windDire1 == windDire2){
+			wd = ", "+getWindDir(windDire1) + "风";
+		}else if(windDire1 != windDire2){
+			wd = ", "+getWindDir(windDire1) + "风转"+ getWindDir(windDire2) + "风";
+		}
+
+		return "天气:"+Param.weatherName[weatherType]+"\n"+wp+wd+"\n"+text;
+	}
+
+
 
 	private String getWindDir(int i) {
 		String s = "";
