@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#2cc13b"
             android:gravity="center"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.8"
                     android:background="#00ff33"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -41,12 +44,12 @@
                         android:layout_marginTop="20dp"
                         android:gravity="center"
                         android:text="频率设置"
-                        android:textSize="30sp" />
+                        android:textSize="30sp"/>
 
                     <ListView
                         android:id="@+id/channels"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"/>
 
                 </LinearLayout>
 
@@ -55,20 +58,21 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="#00aa44"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="50dp"
-                        android:orientation="horizontal" >
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="100dp"
                             android:text="ID: "
-                            android:textSize="30sp" />
+                            android:textSize="30sp"/>
 
                         <EditText
                             android:id="@+id/usrID"
@@ -78,48 +82,29 @@
                             android:gravity="right"
                             android:inputType="number"
                             android:singleLine="true"
-                            android:text="03111231" />
+                            android:text="03111231"/>
 
                         <Button
                             android:id="@+id/uidSet"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="设置" />
+                            android:text="设置"/>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp" >
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="100dp"
-                            android:text="有效期: "
-                            android:textSize="30sp" />
-
-                        <TextView
-                            android:id="@+id/date"
-                            android:layout_width="150dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:text="只读/加密"
-                            android:textSize="30sp" />
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:orientation="horizontal" >
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:text="频偏: "
-                            android:textSize="30sp" />
+                            android:textSize="30sp"/>
 
                         <EditText
                             android:id="@+id/offset"
@@ -129,35 +114,43 @@
                             android:hint="0~255"
                             android:inputType="number"
                             android:singleLine="true"
-                            android:text="125" 
+                            android:text="125"
                             android:textSize="30sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Hz"
-                            android:textSize="30sp" />
+                            android:textSize="30sp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:text="微调  "
-                            android:textSize="30sp" />
+                            android:textSize="30sp"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
 
                         <ImageButton
                             android:id="@+id/offset_plus"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_marginLeft="10dp"
-                            android:src="@drawable/plus" />
+                            android:src="@drawable/plus"/>
 
                         <ImageButton
                             android:id="@+id/offset_minus"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_marginLeft="30dp"
-                            android:src="@drawable/minus" />
+                            android:src="@drawable/minus"/>
 
                         <Button
                             android:id="@+id/offset_w"
@@ -165,21 +158,22 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginLeft="20dp"
-                            android:text="设置" />
+                            android:text="设置"/>
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal" >
+                        android:layout_marginTop="30dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:text="自动拆链时间间隔:"
-                            android:textSize="30sp" />
+                            android:textSize="20sp"/>
 
                         <EditText
                             android:id="@+id/unlinkTime"
@@ -188,28 +182,36 @@
                             android:gravity="right"
                             android:inputType="number"
                             android:singleLine="true"
-                            android:textSize="30sp" />
-                         <TextView
+                            android:textSize="30sp"/>
+
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="分钟"
-                            android:textSize="30sp" />
-                         <Button 
-                             android:id="@+id/unLinkSet"
+                            android:textSize="20sp"/>
+
+                        <Button
+                            android:id="@+id/unLinkSet"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:text="设置" />
+                            android:text="设置"/>
                     </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/state_img"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_marginLeft="450dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="50dp"
-                        android:background="#00aa44"
-                        android:src="@drawable/lock" />
+                        android:gravity="center">
+
+                        <ImageButton
+                            android:id="@+id/state_img"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="#00aa44"
+                            android:src="@drawable/lock"/>
+                    </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
