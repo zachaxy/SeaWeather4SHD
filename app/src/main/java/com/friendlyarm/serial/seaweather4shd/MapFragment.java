@@ -743,13 +743,15 @@ public class MapFragment extends Fragment {
 //                    zoomImageView.currentLocation.x = Tools.transferLocate(msg.arg1)-3;
 //                    zoomImageView.currentLocation.y = Tools.transferLocate(msg.arg2)-6;
                     zoomImageView.currentLocation = Tools.getLoationInView((Locator2) msg.obj);
-                    zoomImageView.invalidate();
-                    //接下来判断是在哪个区?
-                    int i = Tools.whichArea(zoomImageView.currentLocation);
+                    //接下来判断是在哪个区?不能直接使用zoomImageView.currentLocation,人家是:相对于中心点的
+                    //这里需要的坐标是相对于左上角的;
+                    int i = Tools.whichArea(Tools.getLoationInView2((Locator2) msg.obj));
                     if (i > 0 && i != Param.AREA_NO) {
                         Param.AREA_NO = i;
+                        Toast.makeText(getActivity(),"当前海区:"+i,Toast.LENGTH_LONG).show();
                         tts.speak(Param.AREA_NAME[i] + Param.weaherDetail[i], TextToSpeech.QUEUE_FLUSH, null);
                     }
+                    zoomImageView.invalidate();
                     break;
                 default:
                     break;
@@ -1265,7 +1267,7 @@ public class MapFragment extends Fragment {
 			 * Long.valueOf(Param.mDate))) { Log.d("###", "是本机ID,但是已过期,舍弃");
 			 * break; }
 			 */
-                parseWeather(b);
+                parseWeather(b, time);
                 String oWeatherContent = weather.buildText();
                 addToMSGList(new Msg(Param.weatherTypeMap[weather.weatherType],
                         oWeatherContent, time));
@@ -1292,7 +1294,7 @@ public class MapFragment extends Fragment {
             case 3:
                 // 紧急气象消息,除了用户名验证不同外,其他流程一样
 
-                parseWeather(b);
+                parseWeather(b, time);
                 String sWeatherContent = weather.buildText();
                 addToMSGList(new Msg(Param.weatherTypeMap[weather.weatherType],
                         sWeatherContent, time));
@@ -1444,7 +1446,7 @@ public class MapFragment extends Fragment {
     }
 
     // 传入的是实际的data域
-    private void parseWeather(byte[] data) {
+    private void parseWeather(byte[] data, String time) {
         int weatherType = data[4]; // 天气的标识码;
         byte[] bArea = {data[5], data[6], data[7], data[8]};
         String area = Integer.toBinaryString(Integer.valueOf(
@@ -1464,7 +1466,7 @@ public class MapFragment extends Fragment {
         }
         Log.e("###", "天气中的内容是:" + text);
         weather = new Weather(weatherType, area, windPower1, windPower2,
-                windDire1, windDire2, text);
+                windDire1, windDire2, text, time);
     }
 
     private void parseTyphoon(byte[] data) {

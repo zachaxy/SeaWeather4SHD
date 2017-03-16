@@ -162,8 +162,14 @@ public class ZoomImageView extends ImageView implements
                                 dismissPopupWindow(); //可能存在的情况是:我之前点击了1,正在显示,现在我又点击了2,那么我就让之前的消失掉;
                                 TextView area = (TextView) detailContent.findViewById(R.id.detail_popup_tv_area);
                                 area.setText(Param.AREA_NAME[i]);
-                                TextView detal = (TextView) detailContent.findViewById(R.id.detail_popup_tv_content_24);
-                                detal.setText(Param.weaherDetail[i]);
+                                ImageView img = (ImageView) detailContent.findViewById(R.id.detail_popup_img_weather_type);
+                                img.setImageBitmap(Param.weaherDetail[i].bitmap);
+                                TextView tv_type = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_type);
+                                tv_type.setText(Param.weatherName[Param.weaherDetail[i].weatherType]);
+                                TextView tv_wind = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_wind);
+                                tv_wind.setText(Param.weaherDetail[i].buildTextForDetailWithWrap());
+                                TextView time = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_time);
+                                time.setText(Param.weaherDetail[i].time);
                                 popupWindow = new PopupWindow(detailContent, -2, -2);
                                 //需要注意的是:使用popupwindow,必须设置背景,不然动画效果不能展示
                                 popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -582,8 +588,8 @@ public class ZoomImageView extends ImageView implements
          * canvas.drawCircle(rect.centerX() + 100 * currentScale,
 		 * rect.centerY(), 5, paint);
 		 */
-		/*
-		 * if (weather != null) { //int wType =
+        /*
+         * if (weather != null) { //int wType =
 		 * Param.weatherTypeMap[weather.weatherType]; for (int i = 1; i <
 		 * weather.area.size(); i++) { if (weather.area.get(i).equals('1')) {
 		 * canvas.drawBitmap(weather.bitmap, rect.centerX() +
@@ -693,7 +699,7 @@ public class ZoomImageView extends ImageView implements
     }
 
 
-    //根据缩放按下的坐标,还原会为缩放时的坐标;
+    //根据缩放按下的坐标,还原会为缩放时的坐标;不是相对于中心点的;
     public Locater getOrignalLocation(float x, float y) {
         RectF matrixRectF = getMatrixRectF();
         float currentScale = (matrixRectF.right - matrixRectF.left) / getWidth();

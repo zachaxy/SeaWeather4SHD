@@ -15,6 +15,7 @@ import com.felhr.usbserial.UsbSerialDevice;
 import com.friendlyarm.serial.seaweather4shd.Locater;
 import com.friendlyarm.serial.seaweather4shd.Msg;
 import com.friendlyarm.serial.seaweather4shd.R;
+import com.friendlyarm.serial.seaweather4shd.Weather;
 import com.friendlyarm.serial.seaweather4shd.bean.SeaArea;
 import com.friendlyarm.serial.seaweather4shd.dao.MyDatabaseHelper;
 
@@ -233,7 +234,7 @@ public class Param {
             new SeaArea(new Locater(238,406),new Locater(249,430),new Locater(230,462),new Locater(314,462),new Locater(314,381),5834.0),
             new SeaArea(new Locater(314,336),new Locater(314,462),new Locater(412,462),new Locater(412,407),8869.0),
             new SeaArea(new Locater(203,459),new Locater(78,557),new Locater(314,557),new Locater(314,462),16836.5),
-            new SeaArea(new Locater(314,462),new Locater(314,557),new Locater(557,442),new Locater(447,462),12872.5),
+            new SeaArea(new Locater(314,462),new Locater(314,557),new Locater(442,557),new Locater(447,462),12397.5),
             new SeaArea(new Locater(213,557),new Locater(73,753),new Locater(314,753),new Locater(314,557),33516.0),
             new SeaArea(new Locater(314,557),new Locater(314,753),new Locater(520,753),new Locater(442,557),32732.0),
     };
@@ -248,7 +249,7 @@ public class Param {
 
 
     //十八个海区,再加上一个0的天气信息;
-    public static String[] weaherDetail = {
+    /*public static String[] weaherDetail = {
             "天气:晴",
             "天气:晴",
             "天气:晴",
@@ -268,7 +269,7 @@ public class Param {
             "天气:晴",
             "天气:晴",
             "天气:晴",
-    };
+    };*/
 
 
 
@@ -300,4 +301,31 @@ public class Param {
     };
 
     public static int AREA_NO = 0;
+
+
+
+
+
+    /*mad,不玩了,不想一个一个组装字符串了,直接把weather存进去,想要什么消息自己拿吧*/
+    public static Weather[] weaherDetail = {
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather(),
+        new Weather()
+    };
 }

@@ -62,6 +62,19 @@ public class Tools {
 
 
     /***
+     * 目前采用的是这个版本
+     *
+     * @param locator2 获取到的gps经纬度封装;
+     * @return 相对坐标,不是针对中心点的啊;
+     */
+    public static Locator2 getLoationInView2(Locator2 locator2) {
+        double xi = (locator2.x - ORIGINAL_X) * Param.ACTUAL_IMAGE_SIZE / ORIGINAL_INTERVAL;
+        double yi = (ORIGINAL_Y - locator2.y) * Param.ACTUAL_IMAGE_SIZE / ORIGINAL_INTERVAL;
+        return new Locator2(xi, yi);
+    }
+
+
+    /***
      * 针对单个点的坐标
      *
      * @param l
@@ -205,7 +218,7 @@ public class Tools {
         return triangleArea(a, b, c) + triangleArea(a, c, d) + triangleArea(a, d, e);
     }
 
-
+    //返回所在哪个区域
     public static int whichArea(Locator2 locator2) {
         Locater lo = new Locater((int) (locator2.x + 0.5), (int) (locator2.y + 0.5));
         for (int i = 0; i < Param.seaAreas2.length; i++) {

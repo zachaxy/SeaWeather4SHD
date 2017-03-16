@@ -18,7 +18,7 @@ public class SeaArea {
 
 
     //别提供get方法了,直接计算好算了;
-    public double area;
+    public double area = 0;
 
     public SeaArea(Locater a, Locater b, Locater c, Locater d, double area) {
         size = 4;
