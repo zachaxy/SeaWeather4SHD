@@ -598,10 +598,10 @@ public class ZoomImageView extends ImageView implements
 		 * +Param.seaAreas[i].y currentScale, paint); } } }
 		 */
 
-        //这里是画gps当前位置;
+        //这里是画gps当前位置;-3,-6是为了修复偏移问题;
         canvas.drawBitmap(currentIndicator,
-                rect.centerX() + (float) currentLocation.x * currentScale,
-                rect.centerY() + (float) currentLocation.y * currentScale,
+                rect.centerX() + (float) currentLocation.x * currentScale-3,
+                rect.centerY() + (float) currentLocation.y * currentScale-6,
                 paint);
 
         if (Param.bitmaps != null && Param.AREA_NO > 0) {

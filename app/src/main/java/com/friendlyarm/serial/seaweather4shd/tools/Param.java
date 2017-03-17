@@ -121,17 +121,14 @@ public class Param {
 	 * Locater(184, 140) };
 	 */
     /*public static final Locater[] seaAreas = {new Locater(0, 0),
-            new Locater(-169, -182), new Locater(-40, -190),
-            new Locater(99, -191), new Locater(169, -54),
-            new Locater(12, -131), new Locater(-137, -92),
-            new Locater(-204, -88), new Locater(-197, 43),
-            new Locater(-41, -49), new Locater(83, -17), new Locater(133, 50),
-            new Locater(13, 37), new Locater(-79, 63), new Locater(-138, 108),
-            new Locater(-164, 189), new Locater(6, 175), new Locater(55, 99),
-            new Locater(129, 184), new Locater(181, 137)};*/
+            new Locater(-169, -182), new Locater(-40, -190),new Locater(99, -191), new Locater(169, -54),
+            new Locater(12, -131), new Locater(-137, -92),new Locater(-204, -88), new Locater(-197, 43),
+            new Locater(-41, -49), new Locater(83, -17), new Locater(133, 50),new Locater(13, 37), new Locater(-79, 63), new Locater(-138, 108),
+            new Locater(-164, 189), new Locater(6, 175), new Locater(55, 99), new Locater(129, 184), new Locater(181, 137)};*/
+
     //这里表示的是天气图标的显示位置;
     public static final Locater[] seaAreas = {
-            new Locater(0, 0),
+         /*   new Locater(0, 0),
             new Locater(36,-368),
             new Locater(61,-341),
             new Locater(106,-359),
@@ -149,8 +146,8 @@ public class Param {
             new Locater(-150,105),
             new Locater(-23,101),
             new Locater(-141,201),
-            new Locater(-34,201)
-     /*       new Locater(0, 0),
+            new Locater(-34,201)*/
+            new Locater(0, 0),
             new Locater(39,-365),
             new Locater(64,-338),
             new Locater(109,-356),
@@ -168,7 +165,7 @@ public class Param {
             new Locater(-147,108),
             new Locater(-20,104),
             new Locater(-138,204),
-            new Locater(-31,204)*/
+            new Locater(-31,204)
     };
 
     public static Bitmap[] seaAreasWeatherType = new Bitmap[20];
