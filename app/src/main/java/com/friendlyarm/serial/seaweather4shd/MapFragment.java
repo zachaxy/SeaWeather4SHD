@@ -223,7 +223,7 @@ public class MapFragment extends Fragment {
         cBi = (TextView) mapLayout.findViewById(R.id.xinzaobi);
         cNo = (TextView) mapLayout.findViewById(R.id.xindaohao);
         date = (TextView) mapLayout.findViewById(R.id.date);
-        date.setText(BytesUtil.formatTime(Param.mDate.toCharArray()));
+        date.setText(BytesUtil.formatTime4UI(Param.mDate.toCharArray()));
         sound = (ImageButton) mapLayout.findViewById(R.id.sound_switch);
         if (Param.mSound) {
             sound.setImageResource(R.drawable.sound_on);
@@ -662,7 +662,7 @@ public class MapFragment extends Fragment {
                 case 14:
                     // 14好像不用了吧
                     char[] c = Param.mDate.toCharArray();
-                    String date_text = BytesUtil.formatTime(c);
+                    String date_text = BytesUtil.formatTime4UI(c);
 
                     Log.e("###setting", "收到的注册时间是:" + date_text);
                     date.setText(date_text);
@@ -748,8 +748,12 @@ public class MapFragment extends Fragment {
                     int i = Tools.whichArea(Tools.getLoationInView2((Locator2) msg.obj));
                     if (i > 0 && i != Param.AREA_NO) {
                         Param.AREA_NO = i;
-                        Toast.makeText(getActivity(),"当前海区:"+i,Toast.LENGTH_LONG).show();
-                        tts.speak(Param.AREA_NAME[i] + Param.weaherDetail[i], TextToSpeech.QUEUE_FLUSH, null);
+                        Toast.makeText(getActivity(), "当前海区:" + i, Toast.LENGTH_LONG).show();
+                        tts.speak(Param.AREA_NAME[i] +
+                                        Param.weatherName[Param.weaherDetail[i].weatherType] +
+                                        Param.weaherDetail[i].wind_power + "," +
+                                        Param.weaherDetail[i].text,
+                                TextToSpeech.QUEUE_FLUSH, null);
                     }
                     zoomImageView.invalidate();
                     break;

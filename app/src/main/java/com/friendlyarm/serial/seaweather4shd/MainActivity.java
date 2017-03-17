@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -21,6 +23,8 @@ import android.widget.ImageView;
 import com.friendlyarm.serial.seaweather4shd.dao.MyDatabaseHelper;
 import com.friendlyarm.serial.seaweather4shd.tools.Param;
 import com.friendlyarm.serial.seaweather4shd.tools.SysApplication;
+
+import static android.R.id.text1;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -252,6 +256,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         mapFragment.mReadThread.stopReadThread();
                         mapFragment.mParseParamThread.stopParseParamThread();
                         Param.totalFlag = false;
+                        saveArea();
                         finish();
                         SysApplication.getInstance().exit();
 
@@ -263,6 +268,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
         dialog.show();
     }
 
+
+    void saveArea(){
+        String[] aaa = {"area_type","area_wp","area_text","area_time"};
+        SharedPreferences sp = getSharedPreferences("SP_AREA", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        for (int i = 1; i < Param.weaherDetail.length; i++) {
+            editor.putInt(aaa[0]+i,Param.weaherDetail[i].weatherType);
+            editor.putString(aaa[1]+i,Param.weaherDetail[i].wind_power);
+            editor.putString(aaa[2]+i,Param.weaherDetail[i].text);
+            editor.putString(aaa[3]+i,Param.weaherDetail[i].time);
+        }
+        editor.commit();// 提交修改
+    }
 
     /***
      * 打开所需的两个串口

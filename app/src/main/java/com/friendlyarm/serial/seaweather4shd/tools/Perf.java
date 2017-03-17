@@ -12,6 +12,7 @@ public class Perf {
 	// 配置文件设置
 	static final String PERF = "PARAMSETTING";
 	public static SharedPreferences sp;
+	public static SharedPreferences sp_area;
 	public static SharedPreferences.Editor editor;
 
 	// 配置文件中的key
@@ -59,6 +60,12 @@ public class Perf {
 	public Perf(Activity mainActivity) {
 		sp = mainActivity.getSharedPreferences(PERF, Context.MODE_PRIVATE);
 		editor = sp.edit();
+	}
+
+	public Perf(Context context) {
+		sp = context.getSharedPreferences(PERF, Context.MODE_PRIVATE);
+		editor = sp.edit();
+//        sp_area = context.getSharedPreferences("SP_AREA", Context.MODE_PRIVATE);
 	}
 
 	public List<String> readChannels() {

@@ -36,6 +36,7 @@ import com.friendlyarm.serial.seaweather4shd.Locator2;
 import com.friendlyarm.serial.seaweather4shd.R;
 import com.friendlyarm.serial.seaweather4shd.Typhoon;
 import com.friendlyarm.serial.seaweather4shd.Weather;
+import com.friendlyarm.serial.seaweather4shd.tools.BytesUtil;
 import com.friendlyarm.serial.seaweather4shd.tools.Param;
 import com.friendlyarm.serial.seaweather4shd.tools.Tools;
 
@@ -163,13 +164,13 @@ public class ZoomImageView extends ImageView implements
                                 TextView area = (TextView) detailContent.findViewById(R.id.detail_popup_tv_area);
                                 area.setText(Param.AREA_NAME[i]);
                                 ImageView img = (ImageView) detailContent.findViewById(R.id.detail_popup_img_weather_type);
-                                img.setImageBitmap(Param.weaherDetail[i].bitmap);
+                                img.setImageBitmap(Param.bitmaps[Param.weaherDetail[i].weatherType]);
                                 TextView tv_type = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_type);
                                 tv_type.setText(Param.weatherName[Param.weaherDetail[i].weatherType]);
                                 TextView tv_wind = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_wind);
-                                tv_wind.setText(Param.weaherDetail[i].buildTextForDetailWithWrap());
+                                tv_wind.setText(Param.weaherDetail[i].wind_power);
                                 TextView time = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_time);
-                                time.setText(Param.weaherDetail[i].time);
+                                time.setText("发布时间:" + BytesUtil.formatTime(Param.weaherDetail[i].time.toCharArray()));
                                 popupWindow = new PopupWindow(detailContent, -2, -2);
                                 //需要注意的是:使用popupwindow,必须设置背景,不然动画效果不能展示
                                 popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -664,7 +665,7 @@ public class ZoomImageView extends ImageView implements
                     }
                     k++;
                 }
-				/*
+                /*
 				 * paint.setStyle(Paint.Style.STROKE);
 				 * paint.setColor(Color.RED); canvas.drawPath(path, paint);
 				 */
@@ -826,5 +827,6 @@ public class ZoomImageView extends ImageView implements
                 context.getResources(), Param.weatherTypeMap[47]);
 
     }
+
 
 }

@@ -126,4 +126,17 @@ public class BytesUtil {
 		}		
 		return date_text;
 	}
+
+
+
+    public static String formatTime4UI(char[] c){
+        StringBuilder date_text = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            date_text.append(c[i]);
+            if (i % 2 == 1 && i < 5) {
+                date_text = date_text.append("-");
+            }
+        }
+        return date_text.toString();
+    }
 }

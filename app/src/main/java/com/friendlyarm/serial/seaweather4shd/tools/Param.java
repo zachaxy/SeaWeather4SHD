@@ -16,6 +16,7 @@ import com.friendlyarm.serial.seaweather4shd.Locater;
 import com.friendlyarm.serial.seaweather4shd.Msg;
 import com.friendlyarm.serial.seaweather4shd.R;
 import com.friendlyarm.serial.seaweather4shd.Weather;
+import com.friendlyarm.serial.seaweather4shd.WeatherHelp;
 import com.friendlyarm.serial.seaweather4shd.bean.SeaArea;
 import com.friendlyarm.serial.seaweather4shd.dao.MyDatabaseHelper;
 
@@ -215,7 +216,6 @@ public class Param {
     public final static double ACTUAL_IMAGE_SIZE = 800.0;
 
 
-
     //这里规划的是整个海区的区域;同上面的seaAraes显示的天气图标位置不同;
     public static final SeaArea[] seaAreas2 = {
             new SeaArea(),
@@ -231,7 +231,7 @@ public class Param {
             new SeaArea(new Locater(411,407),new Locater(411,462),new Locater(518,462),new Locater(518,407),5885.0),
             new SeaArea(new Locater(139,374),new Locater(141,504),new Locater(203,459),new Locater(225,400),6898.0),
             new SeaArea(new Locater(224,412),new Locater(213,434),new Locater(249,430),new Locater(238,406),575.0),
-            new SeaArea(new Locater(238,406),new Locater(249,430),new Locater(230,462),new Locater(314,462),new Locater(314,381),5834.0),
+            new SeaArea(new Locater(249,430),new Locater(230,462),new Locater(314,462),new Locater(314,381),new Locater(238,406),5026.0),
             new SeaArea(new Locater(314,336),new Locater(314,462),new Locater(412,462),new Locater(412,407),8869.0),
             new SeaArea(new Locater(203,459),new Locater(78,557),new Locater(314,557),new Locater(314,462),16836.5),
             new SeaArea(new Locater(314,462),new Locater(314,557),new Locater(442,557),new Locater(447,462),12397.5),
@@ -305,27 +305,26 @@ public class Param {
 
 
 
-
     /*mad,不玩了,不想一个一个组装字符串了,直接把weather存进去,想要什么消息自己拿吧*/
-    public static Weather[] weaherDetail = {
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather(),
-        new Weather()
+    public static WeatherHelp[] weaherDetail = {
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
+        new WeatherHelp(),
     };
 }

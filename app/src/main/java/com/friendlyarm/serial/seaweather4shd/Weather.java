@@ -30,15 +30,39 @@ public class Weather {
                    int windPower1, int windPower2,
                    int windDire1, int windDire2,
                    String text, String time) {
-        this(weatherType, area, windPower1, windPower2, windDire1, windDire2, text);
+        this.weatherType = weatherType;
+        this.windPower1 = windPower1;
+        this.windPower2 = windPower2;
+        this.windDire1 = windDire1;
+        this.windDire2 = windDire2;
+        // this.text =
+        // text+"-"+weatherType+"-"+windPower1+"-"+windPower2+"-"+windDire1+"-"+windDire2;
+        this.text = text;
         this.time = time;
+        // area域的处理
+        //this.area.add('0');
+
+        for (int i = 0; i < area.length(); i++) {
+            // this.area.add(area.charAt(area.length()-1-i));
+            if (area.charAt(area.length() - 1 - i) == '1') {
+                Param.seaAreasWeatherType[i + 1] = Param.bitmaps[weatherType];
+                Param.weaherDetail[i + 1].weatherType = weatherType;
+                Param.weaherDetail[i + 1].wind_power =  buildTextForDetailWithWrap();
+                Param.weaherDetail[i + 1].text = text;
+                Param.weaherDetail[i + 1].time = time;
+            }
+        }
+        this.bitmap = BitmapFactory.decodeResource(
+                ZoomImageView.zoomContext.getResources(),
+                Param.weatherTypeMap[this.weatherType]);
+
     }
 
     public Weather(int weatherType, String area,
                    int windPower1, int windPower2,
                    int windDire1, int windDire2,
                    String text) {
-        this.weatherType = weatherType;
+       /* this.weatherType = weatherType;
         this.windPower1 = windPower1;
         this.windPower2 = windPower2;
         this.windDire1 = windDire1;
@@ -55,12 +79,15 @@ public class Weather {
             // this.area.add(area.charAt(area.length()-1-i));
             if (area.charAt(area.length() - 1 - i) == '1') {
                 Param.seaAreasWeatherType[i + 1] = Param.bitmaps[weatherType];
-                Param.weaherDetail[i + 1] = this;
+                Param.weaherDetail[i + 1].weatherType = weatherType;
+                Param.weaherDetail[i + 1].wind_power =  ;
+                Param.weaherDetail[i + 1].text = weatherType;
+                Param.weaherDetail[i + 1].time = weatherType;
             }
         }
         this.bitmap = BitmapFactory.decodeResource(
                 ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[this.weatherType]);
+                Param.weatherTypeMap[this.weatherType]);*/
     }
 
     public String buildText() {
@@ -146,133 +173,4 @@ public class Weather {
 
         return s;
     }
-
-    private void initParamBitmaps() {
-
-        Param.bitmaps = new Bitmap[39];
-        Param.bitmaps[0] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[0]);
-        Param.bitmaps[1] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[1]);
-        Param.bitmaps[2] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[2]);
-        Param.bitmaps[3] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[3]);
-        Param.bitmaps[4] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[4]);
-        Param.bitmaps[5] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[5]);
-        Param.bitmaps[6] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[6]);
-        Param.bitmaps[7] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[7]);
-        Param.bitmaps[8] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[8]);
-        Param.bitmaps[9] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[9]);
-        Param.bitmaps[10] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[10]);
-        Param.bitmaps[11] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[11]);
-        Param.bitmaps[12] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[12]);
-        Param.bitmaps[13] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[13]);
-        Param.bitmaps[14] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[14]);
-        Param.bitmaps[15] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[15]);
-        Param.bitmaps[16] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[16]);
-        Param.bitmaps[17] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[17]);
-        Param.bitmaps[18] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[18]);
-        Param.bitmaps[19] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[19]);
-        Param.bitmaps[20] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[20]);
-        Param.bitmaps[21] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[21]);
-        Param.bitmaps[22] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[22]);
-        Param.bitmaps[23] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[23]);
-        Param.bitmaps[24] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[24]);
-        Param.bitmaps[25] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[25]);
-        Param.bitmaps[26] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[26]);
-        Param.bitmaps[27] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[27]);
-        Param.bitmaps[28] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[28]);
-        Param.bitmaps[29] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[29]);
-        Param.bitmaps[30] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[30]);
-        Param.bitmaps[31] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[31]);
-        Param.bitmaps[32] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[32]);
-        Param.bitmaps[33] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[33]);
-        Param.bitmaps[34] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[34]);
-        Param.bitmaps[35] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[35]);
-        Param.bitmaps[36] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[36]);
-        Param.bitmaps[37] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[37]);
-        Param.bitmaps[38] = BitmapFactory.decodeResource(
-                ZoomImageView.zoomContext.getResources(),
-                Param.weatherTypeMap[38]);
-
-
-        //这里全部初始化成了晴天;
-        for (int i = 0; i < Param.seaAreasWeatherType.length; i++) {
-            Param.seaAreasWeatherType[i] = Param.bitmaps[0];
-        }
-    }
-
 }
