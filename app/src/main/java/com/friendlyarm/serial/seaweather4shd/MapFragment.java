@@ -79,7 +79,8 @@ public class MapFragment extends Fragment {
     private ZoomImageView zoomImageView;
 
     private MarqueenTextView mNewMsg;
-    public TextToSpeech tts;
+    //NOTE:修改为静态变量tts
+    public static TextToSpeech tts;
     private ListView mMsgList;
     private MsgAdapter adapter;
 
@@ -737,7 +738,7 @@ public class MapFragment extends Fragment {
                 case LOCATION:
                     //有新的物理位置了;这里拿到的还是实际的位置
                     // 接下来转换成相对中心点的坐标;-3是相对左挪动距离,-6是向上挪动距离;
-                    Toast.makeText(getActivity(), "" + msg.arg1 + "<--->" + msg.arg2, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "" + msg.arg1 + "<--->" + msg.arg2, Toast.LENGTH_LONG).show();
                     // TODO: 2017/3/8 严重的逻辑错误,这个发过来的是实际的坐标,而下面调用的是转换安台标点到平板的相对坐标
                     //应该调用:
 //                    zoomImageView.currentLocation.x = Tools.transferLocate(msg.arg1)-3;
@@ -749,11 +750,13 @@ public class MapFragment extends Fragment {
                     if (i > 0 && i != Param.AREA_NO) {
                         Param.AREA_NO = i;
                         Toast.makeText(getActivity(), "当前海区:" + i, Toast.LENGTH_LONG).show();
-                        tts.speak(Param.AREA_NAME[i] +
+                        /*tts.speak(Param.AREA_NAME[i] +
                                         Param.weatherName[Param.weaherDetail[i].weatherType] +
                                         Param.weaherDetail[i].wind_power + "," +
                                         Param.weaherDetail[i].text,
-                                TextToSpeech.QUEUE_FLUSH, null);
+                                TextToSpeech.QUEUE_FLUSH, null);*/
+                        //在显示海区pop的里面读取内容;
+                        zoomImageView.showPopupWindow(i);
                     }
                     zoomImageView.invalidate();
                     break;

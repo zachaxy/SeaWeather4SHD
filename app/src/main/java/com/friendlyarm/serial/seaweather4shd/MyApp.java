@@ -37,6 +37,7 @@ public class MyApp extends Application {
                 .init(this);
         initParamBitmaps();
         initParamAreas();
+        initParamAreaNo();
     }
 
 
@@ -66,13 +67,13 @@ public class MyApp extends Application {
     }
 
     private void initParamAreas() {
-        String[] aaa = {"area_type","area_wp","area_text","area_time"};
+        String[] aaa = {"area_type", "area_wp", "area_text", "area_time"};
         SharedPreferences sp = getSharedPreferences("SP_AREA", Context.MODE_PRIVATE);
-        for (int i = 1; i <Param.weaherDetail.length ; i++) {
-            Param.weaherDetail[i].weatherType = sp.getInt(aaa[0]+i, 0);
-            Param.weaherDetail[i].wind_power = sp.getString(aaa[1]+i, "");
-            Param.weaherDetail[i].text = sp.getString(aaa[2]+i, "");
-            Param.weaherDetail[i].time = sp.getString(aaa[3]+i, "");
+        for (int i = 1; i < Param.weaherDetail.length; i++) {
+            Param.weaherDetail[i].weatherType = sp.getInt(aaa[0] + i, 0);
+            Param.weaherDetail[i].wind_power = sp.getString(aaa[1] + i, "");
+            Param.weaherDetail[i].text = sp.getString(aaa[2] + i, "");
+            Param.weaherDetail[i].time = sp.getString(aaa[3] + i, "");
         }
 
     }
@@ -202,6 +203,11 @@ public class MyApp extends Application {
         for (int i = 0; i < Param.seaAreasWeatherType.length; i++) {
             Param.seaAreasWeatherType[i] = Param.bitmaps[0];
         }
+    }
+
+    private void initParamAreaNo() {
+        SharedPreferences sp = getSharedPreferences("SP_AREA_NO", Context.MODE_PRIVATE);
+        Param.AREA_NO = sp.getInt("AREA_NO", 0);
     }
 }
 

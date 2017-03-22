@@ -256,6 +256,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         mapFragment.mReadThread.stopReadThread();
                         mapFragment.mParseParamThread.stopParseParamThread();
                         Param.totalFlag = false;
+                        saveAreaNo();
                         saveArea();
                         finish();
                         SysApplication.getInstance().exit();
@@ -269,15 +270,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
 
-    void saveArea(){
-        String[] aaa = {"area_type","area_wp","area_text","area_time"};
+    void saveAreaNo() {
+        SharedPreferences sp = getSharedPreferences("SP_AREA_NO", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("AREA_NO", Param.AREA_NO);
+        editor.commit();
+    }
+
+    void saveArea() {
+
+        String[] aaa = {"area_type", "area_wp", "area_text", "area_time"};
         SharedPreferences sp = getSharedPreferences("SP_AREA", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         for (int i = 1; i < Param.weaherDetail.length; i++) {
-            editor.putInt(aaa[0]+i,Param.weaherDetail[i].weatherType);
-            editor.putString(aaa[1]+i,Param.weaherDetail[i].wind_power);
-            editor.putString(aaa[2]+i,Param.weaherDetail[i].text);
-            editor.putString(aaa[3]+i,Param.weaherDetail[i].time);
+            editor.putInt(aaa[0] + i, Param.weaherDetail[i].weatherType);
+            editor.putString(aaa[1] + i, Param.weaherDetail[i].wind_power);
+            editor.putString(aaa[2] + i, Param.weaherDetail[i].text);
+            editor.putString(aaa[3] + i, Param.weaherDetail[i].time);
         }
         editor.commit();// 提交修改
     }
