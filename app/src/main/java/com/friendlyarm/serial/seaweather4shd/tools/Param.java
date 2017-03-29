@@ -323,5 +323,8 @@ public class Param {
         new WeatherHelp(),
         new WeatherHelp(),
         new WeatherHelp(),
+        new WeatherHelp()
     };
+
+    public static final String seperator = ",";
 }

@@ -42,6 +42,9 @@ import com.friendlyarm.serial.seaweather4shd.tools.BytesUtil;
 import com.friendlyarm.serial.seaweather4shd.tools.Param;
 import com.friendlyarm.serial.seaweather4shd.tools.Tools;
 
+import static android.R.attr.x;
+import static android.R.attr.y;
+
 /**
  * Created by zhangxin on 2016/3/28.
  */
@@ -187,9 +190,9 @@ public class ZoomImageView extends ImageView implements
                                 detailContent.startAnimation(animation);
                                 inFlag = true;
                                 //添加语音读功能;
-                                MapFragment.tts.speak(Param.AREA_NAME[i] +
-                                                Param.weatherName[Param.weaherDetail[i].weatherType] +
-                                                Param.weaherDetail[i].wind_power + "," +
+                                MapFragment.tts.speak(Param.AREA_NAME[i] + Param.seperator +
+                                                Param.weatherName[Param.weaherDetail[i].weatherType] + Param.seperator +
+                                                Param.weaherDetail[i].wind_power + "," + Param.seperator +
                                                 Param.weaherDetail[i].text,
                                         TextToSpeech.QUEUE_FLUSH, null);
                                 break;
@@ -570,6 +573,8 @@ public class ZoomImageView extends ImageView implements
     // private Canvas canvas;
     private Paint paint;
 
+    private int detal = 0;
+
     // private Path path;
     @Override
     protected void onDraw(Canvas canvas) {
@@ -582,10 +587,6 @@ public class ZoomImageView extends ImageView implements
 
         float currentScale;
         RectF rect = getMatrixRectF();
-        Log.d("$$$$$$$", "rect" + rect.contains(0f, 0f));
-        Log.d("$$$$$$$", "rect" + rect.toString());
-        Log.d("$$$$$$$", "Center:" + rect.centerX() + " " + rect.centerY());
-        // Log.d("$$$$$$$", "rect"+ rect.);
 
         // 去除锯齿
         paint.setAntiAlias(true);
@@ -598,34 +599,38 @@ public class ZoomImageView extends ImageView implements
          * canvas.drawCircle(rect.centerX() + 100 * currentScale,
 		 * rect.centerY(), 5, paint);
 		 */
-        /*
-         * if (weather != null) { //int wType =
-		 * Param.weatherTypeMap[weather.weatherType]; for (int i = 1; i <
-		 * weather.area.size(); i++) { if (weather.area.get(i).equals('1')) {
-		 * canvas.drawBitmap(weather.bitmap, rect.centerX() +
-		 * Param.seaAreas[i].x * currentScale, rect.centerY() +
-		 * +Param.seaAreas[i].y currentScale, paint); } } }
-		 */
-        //NOTE:当前偏移位置还是不够,要再扩大一点;,本来以为小矩形的大小是6*6,现在改大一点吧
-        //这里是画gps当前位置;-3,-6是为了修复偏移问题;
-        canvas.drawBitmap(currentIndicator,
-                rect.centerX() + (float) currentLocation.x * currentScale - 5,
-                rect.centerY() + (float) currentLocation.y * currentScale - 10,
-                paint);
 
-        if (Param.bitmaps != null && Param.AREA_NO > 0) {
+/*          if (weather != null) { //int wType =
+		  Param.weatherTypeMap[weather.weatherType]; for (int i = 1; i <
+		  weather.area.size(); i++) { if (weather.area.get(i).equals('1')) {
+		  canvas.drawBitmap(weather.bitmap, rect.centerX() +
+		  Param.seaAreas[i].x * currentScale, rect.centerY() +
+		  +Param.seaAreas[i].y currentScale, paint); } } }*/
+
+
+//        if (Param.bitmaps != null && Param.AREA_NO > 0) {
+
+        if (currentScale < 1.5) {
+            detal = 8;
+        } else {
+            detal = 5;
+        }
+
+
+        if (Param.bitmaps != null) {
             //fixed: 之前这里是硬编码,写的是 i<=19;现在是18个海区,所以别硬编码了;
             //NOTE:之前是在位置整体-3之后再乘以缩放因子,现在是在乘缩放因子之后再-3,可以达到这种效果;
-           /* for (int i = 1; i < Param.seaAreas.length; i++) {
+
+            for (int i = 1; i < Param.seaAreas.length; i++) {
                 canvas.drawBitmap(Param.seaAreasWeatherType[i],
-                        rect.centerX() + Param.seaAreas[i].x * currentScale -3,
-                        rect.centerY() + Param.seaAreas[i].y * currentScale -3,
+                        rect.centerX() + Param.seaAreas[i].x * currentScale - detal,
+                        rect.centerY() + Param.seaAreas[i].y * currentScale - detal,
                         paint);
-            }*/
-            canvas.drawBitmap(Param.seaAreasWeatherType[Param.AREA_NO],
+            }
+            /*canvas.drawBitmap(Param.seaAreasWeatherType[Param.AREA_NO],
                     rect.centerX() + Param.seaAreas[Param.AREA_NO].x * currentScale - 5,
                     rect.centerY() + Param.seaAreas[Param.AREA_NO].y * currentScale - 5,
-                    paint);
+                    paint);*/
         }
         // 表明此时有台风
         if (!Param.IsTyphonClear) {
@@ -683,7 +688,7 @@ public class ZoomImageView extends ImageView implements
 
         // canvas.drawBitmap(bitmap, matrix, paint)
         /*
-		 * paint.setStyle(Paint.Style.STROKE); Path path = new Path();
+         * paint.setStyle(Paint.Style.STROKE); Path path = new Path();
 		 * path.moveTo(rect.centerX(), rect.centerY());
 		 * path.lineTo(rect.centerX() + 100 * currentScale, rect.centerY());
 		 * paint.setColor(Color.BLUE); canvas.drawPath(path, paint);
@@ -693,6 +698,31 @@ public class ZoomImageView extends ImageView implements
 		 * rect.centerY(), paint); canvas.drawText("相对点", rect.centerX() + 100 *
 		 * currentScale, rect.centerY(), paint);
 		 */
+
+
+        //NOTE:当前偏移位置还是不够,要再扩大一点;,本来以为小矩形的大小是6*6,现在改大一点吧
+        //这里是画gps当前位置;-3,-6是为了修复偏移问题;
+        //图标添加在最下边
+       /* canvas.drawBitmap(currentIndicator,
+                rect.centerX() + (float) currentLocation.x * currentScale - 2 * detal,
+                rect.centerY() + (float) currentLocation.y * currentScale - 4 * detal,
+                paint);*/
+
+        //NOTE:算了,别瞎热闹了,用个白点算了;
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(
+                rect.centerX() + (float) currentLocation.x * currentScale - 2 * 4,
+                rect.centerY() + (float) currentLocation.y * currentScale - 4 * 4,
+                20,
+                paint);
+        paint.setColor(0xFF87CEFA);  //浅蓝色...
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(
+                rect.centerX() + (float) currentLocation.x * currentScale - 2 * 4,
+                rect.centerY() + (float) currentLocation.y * currentScale - 4 * 4,
+                10,
+                paint);
 
     }
 
@@ -743,11 +773,45 @@ public class ZoomImageView extends ImageView implements
         ScaleAnimation animation = new ScaleAnimation(0.5f, 1f, 0.5f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         animation.setDuration(300);
         detailContent.startAnimation(animation);
-        MapFragment.tts.speak(Param.AREA_NAME[i] +
-                        Param.weatherName[Param.weaherDetail[i].weatherType] +
+        MapFragment.tts.speak(Param.AREA_NAME[i] + Param.seperator +
+                        Param.weatherName[Param.weaherDetail[i].weatherType] + Param.seperator +
                         Param.weaherDetail[i].wind_power + "," +
                         Param.weaherDetail[i].text,
                 TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+
+
+    //显示指定海区的坐标;传入的是海区的x,y位置;与上一个方法的区别是只显示window,不speak;
+    public void showPopupWindowOnly(int i) {
+        dismissPopupWindow(); //可能存在的情况是:我之前点击了1,正在显示,现在我又点击了2,那么我就让之前的消失掉;
+        TextView area = (TextView) detailContent.findViewById(R.id.detail_popup_tv_area);
+        area.setText(Param.AREA_NAME[i]);
+        ImageView img = (ImageView) detailContent.findViewById(R.id.detail_popup_img_weather_type);
+        img.setImageBitmap(Param.bitmaps[Param.weaherDetail[i].weatherType]);
+        TextView tv_type = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_type);
+        tv_type.setText(Param.weatherName[Param.weaherDetail[i].weatherType]);
+        TextView tv_wind = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_wind);
+        tv_wind.setText(Param.weaherDetail[i].wind_power);
+        TextView time = (TextView) detailContent.findViewById(R.id.detail_popup_tv_weather_time);
+        time.setText("发布时间:" + BytesUtil.formatTime(Param.weaherDetail[i].time.toCharArray()));
+        popupWindow = new PopupWindow(detailContent, -2, -2);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        RectF rectF = getMatrixRectF();
+        float currentScale = (rectF.right - rectF.left) / getWidth();
+        int x = (int) (rectF.centerX() + currentLocation.x * currentScale);
+        int y = (int) (rectF.centerY() + currentLocation.y * currentScale);
+        //rect.centerX() + (float) currentLocation.x * currentScale
+        popupWindow.showAtLocation(ZoomImageView.this, Gravity.LEFT + Gravity.TOP, x, y);
+
+        ScaleAnimation animation = new ScaleAnimation(0.5f, 1f, 0.5f, 1f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(300);
+        detailContent.startAnimation(animation);
+/*        MapFragment.tts.speak(Param.AREA_NAME[i] + Param.seperator +
+                        Param.weatherName[Param.weaherDetail[i].weatherType] + Param.seperator +
+                        Param.weaherDetail[i].wind_power + "," +
+                        Param.weaherDetail[i].text,
+                TextToSpeech.QUEUE_FLUSH, null);*/
     }
 
 

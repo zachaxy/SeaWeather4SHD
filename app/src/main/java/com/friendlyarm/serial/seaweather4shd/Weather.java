@@ -47,7 +47,7 @@ public class Weather {
             if (area.charAt(area.length() - 1 - i) == '1') {
                 Param.seaAreasWeatherType[i + 1] = Param.bitmaps[weatherType];
                 Param.weaherDetail[i + 1].weatherType = weatherType;
-                Param.weaherDetail[i + 1].wind_power =  buildTextForDetailWithWrap();
+                Param.weaherDetail[i + 1].wind_power = buildTextForDetailWithWrap();
                 Param.weaherDetail[i + 1].text = text;
                 Param.weaherDetail[i + 1].time = time;
             }
@@ -91,8 +91,20 @@ public class Weather {
     }
 
     public String buildText() {
-        String wp = "";
         String wd = "";
+        String wp = "";
+
+
+
+        if ((windDire1 == 0) && (windDire2 == 0)) {
+            wd = "";
+        } else if (windDire1 == windDire2) {
+            wd = ", " + getWindDir(windDire1) + "风";
+        } else if (windDire1 != windDire2) {
+            wd = ", " + getWindDir(windDire1) + "风转" + getWindDir(windDire2) + "风";
+        }
+
+
 
         if ((windPower1 == 0) && (windPower2 == 0)) {
             wp = "";
@@ -103,40 +115,36 @@ public class Weather {
         }
 
 
-        if ((windDire1 == 0) && (windDire2 == 0)) {
-            wd = "";
-        } else if (windDire1 == windDire2) {
-            wd = ", " + getWindDir(windDire1) + "风";
-        } else if (windDire1 != windDire2) {
-            wd = ", " + getWindDir(windDire1) + "风转" + getWindDir(windDire2) + "风";
-        }
-
-        return "(天气:" + Param.weatherName[weatherType] + wp + wd + ")" + text;
+        return "(天气:" + Param.weatherName[weatherType] + wd + wp + ")" + text;
     }
 
 
     public String buildTextForDetailWithWrap() {
-        String wp = "";
         String wd = "";
-
-        if ((windPower1 == 0) && (windPower2 == 0)) {
-            wp = "";
-        } else if (windPower2 == windPower1) {
-            wp = "风力" + windPower1 + "级";
-        } else if (windPower2 != windPower1) {
-            wp = "风力" + windPower1 + "到" + windPower2 + "级";
-        }
+        String wp = "";
 
 
         if ((windDire1 == 0) && (windDire2 == 0)) {
             wd = "";
         } else if (windDire1 == windDire2) {
-            wd = ", " + getWindDir(windDire1) + "风";
+            wd = " " + getWindDir(windDire1) + "风";
         } else if (windDire1 != windDire2) {
-            wd = ", " + getWindDir(windDire1) + "风转" + getWindDir(windDire2) + "风";
+            wd = " " + getWindDir(windDire1) + "风转" + getWindDir(windDire2) + "风";
         }
 
-        return wp + wd;
+
+        if ((windPower1 == 0) && (windPower2 == 0)) {
+            wp = "";
+        } else if (windPower2 == windPower1) {
+            wp = ", 风力" + windPower1 + "级";
+        } else if (windPower2 != windPower1) {
+            wp = ", 风力" + windPower1 + "到" + windPower2 + "级";
+        }
+
+
+
+
+        return wd + wp;
     }
 
 

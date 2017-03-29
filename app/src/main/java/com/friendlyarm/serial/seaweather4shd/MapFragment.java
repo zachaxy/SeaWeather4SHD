@@ -669,7 +669,7 @@ public class MapFragment extends Fragment {
                     date.setText(date_text);
                     // 已经在handler发送msg之前就已经修改过pref里的数据
                     break;
-                case 15:
+                case 15:  //气象信息,台风;
                     adapter.notifyDataSetChanged();
                     mMsgList.setAdapter(adapter);
 
@@ -680,9 +680,15 @@ public class MapFragment extends Fragment {
                         show1 = text;
                     }
                     mNewMsg.setText(show1);
-                    tts.speak(show1, TextToSpeech.QUEUE_FLUSH, null);
+//                    tts.speak(show1, TextToSpeech.QUEUE_FLUSH, null);
                     zoomImageView.weather = weather;
                     zoomImageView.invalidate();
+                    zoomImageView.showPopupWindowOnly(Param.AREA_NO);
+                    tts.speak(Param.AREA_NAME[Param.AREA_NO] + Param.seperator +
+                                    Param.weatherName[Param.weaherDetail[Param.AREA_NO].weatherType] + Param.seperator +
+                                    Param.weaherDetail[Param.AREA_NO].wind_power + "," +
+                                    Param.weaherDetail[Param.AREA_NO].text,
+                            TextToSpeech.QUEUE_FLUSH, null);
                     break;
                 case 16:
                     cNo.setText(Param.mSNN);

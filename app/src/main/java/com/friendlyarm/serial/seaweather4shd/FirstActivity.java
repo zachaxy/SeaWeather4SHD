@@ -426,7 +426,9 @@ public class FirstActivity extends Activity {
 
     private void initConf() {
         //Param.perf = new Perf(FirstActivity.this);
-        Param.perf = new Perf(getApplicationContext());
+        if (Param.perf==null) {
+            Param.perf = new Perf(getApplicationContext());
+        }
         Param.perf.readAll();
         tv1.setText("初始化配置文件完成");
         img1.setImageResource(R.drawable.ok);

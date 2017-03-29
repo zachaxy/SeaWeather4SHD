@@ -240,6 +240,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onBackPressed() {
+        //NOTE:在这里进行海区的保存;
+        /*saveAreaNo();
+        saveArea();*/
         AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
         dialog.setTitle("退出程序")
                 .setMessage("退出程序后将无法获取服务!\n是否退出程序?")
@@ -256,6 +259,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         mapFragment.mReadThread.stopReadThread();
                         mapFragment.mParseParamThread.stopParseParamThread();
                         Param.totalFlag = false;
+                        //考虑在这里调用是不是无法快速执行;
                         saveAreaNo();
                         saveArea();
                         finish();
@@ -282,6 +286,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String[] aaa = {"area_type", "area_wp", "area_text", "area_time"};
         SharedPreferences sp = getSharedPreferences("SP_AREA", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
+        //从1开始存入
         for (int i = 1; i < Param.weaherDetail.length; i++) {
             editor.putInt(aaa[0] + i, Param.weaherDetail[i].weatherType);
             editor.putString(aaa[1] + i, Param.weaherDetail[i].wind_power);
