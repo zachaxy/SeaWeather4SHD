@@ -573,7 +573,7 @@ public class ZoomImageView extends ImageView implements
     // private Canvas canvas;
     private Paint paint;
 
-    private int detal = 0;
+    private int detal = 10; //这次你满意了吧;
 
     // private Path path;
     @Override
@@ -610,11 +610,11 @@ public class ZoomImageView extends ImageView implements
 
 //        if (Param.bitmaps != null && Param.AREA_NO > 0) {
 
-        if (currentScale < 1.5) {
+       /* if (currentScale < 1.5) {
             detal = 8;
         } else {
             detal = 5;
-        }
+        }*/
 
 
         if (Param.bitmaps != null) {
@@ -714,9 +714,9 @@ public class ZoomImageView extends ImageView implements
         canvas.drawCircle(
                 rect.centerX() + (float) currentLocation.x * currentScale - 2 * 4,
                 rect.centerY() + (float) currentLocation.y * currentScale - 4 * 4,
-                20,
+                15,
                 paint);
-        paint.setColor(0xFF87CEFA);  //浅蓝色...
+        paint.setColor(0xFF0066CC);  //中蓝色...
         paint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(
                 rect.centerX() + (float) currentLocation.x * currentScale - 2 * 4,
@@ -816,7 +816,7 @@ public class ZoomImageView extends ImageView implements
 
 
     //取消popupwindow的显示,适用场景在放大或者移动的过程中.
-    private void dismissPopupWindow() {
+    public void dismissPopupWindow() {
         if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
             popupWindow = null;

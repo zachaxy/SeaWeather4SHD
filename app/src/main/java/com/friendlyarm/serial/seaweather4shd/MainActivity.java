@@ -164,6 +164,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         hideFragments(transaction);
         switch (index) {
             case 0:
+                if (Param.AREA_NO > 0) {
+                    mapFragment.zoomImageView.showPopupWindowOnly(Param.AREA_NO);
+                }
                 mapImage.setImageResource(R.drawable.map_select);
                 if (mapFragment == null) {
                     mapFragment = new MapFragment();
@@ -173,6 +176,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case 1:
+                mapFragment.zoomImageView.dismissPopupWindow();
                 settingImage.setImageResource(R.drawable.admin_select);
                 if (settingFragment == null) {
                     settingFragment = new SettingFragment();
@@ -182,6 +186,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 }
                 break;
             case 2:
+                mapFragment.zoomImageView.dismissPopupWindow();
                 dbImage.setImageResource(R.drawable.db_select);
                 if (dbFragment == null) {
                     dbFragment = new DBFragment();

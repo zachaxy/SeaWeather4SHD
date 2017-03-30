@@ -76,7 +76,7 @@ import static com.friendlyarm.serial.seaweather4shd.tools.Tools.whichArea;
  */
 public class MapFragment extends Fragment {
 
-    private ZoomImageView zoomImageView;
+    public ZoomImageView zoomImageView;
 
     private MarqueenTextView mNewMsg;
     //NOTE:修改为静态变量tts
